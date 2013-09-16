@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">Guana anuncios</string>
+    <string name="title_activity_anuncio">AnuncioActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
