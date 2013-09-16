@@ -22,6 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.udb.mad.shinmen.benja.guana.anuncios.PublicarAnuncioActivity"
+            android:label="@string/title_activity_publicar_anuncio" >
+        </activity>
     </application>
 
 </manifest>

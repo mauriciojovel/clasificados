@@ -1,7 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Guana anuncios</string>
     <string name="title_activity_anuncio">AnuncioActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_publicar_anuncio">PublicarAnuncioActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
