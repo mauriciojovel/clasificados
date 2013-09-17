@@ -16,5 +16,6 @@
     <string name="regAlias">Alias</string>
     <string name="btnCancelar">Cancelar</string>
     <string name="title_activity_registro">RegistroActivity</string>
+    <string name="title_activity_publicar_anuncio">PublicarAnuncioActivity</string>
 
 </resources>
