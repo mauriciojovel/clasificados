@@ -4,7 +4,17 @@
     <string name="app_name">Guana anuncios</string>
     <string name="title_activity_anuncio">AnuncioActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_publicar_anuncio">PublicarAnuncioActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="losginUsuario">Usuario</string>
+    <string name="losginPass">Contraseña</string>
+    <string name="btnLogin">Entrar</string>
+    <string name="btnRegistrar">Registrar</string>
+    <string name="regNombre">Nombre completo</string>
+    <string name="regCorreo">Correo electrónico</string>
+    <string name="regPass">Contraseña</string>
+    <string name="regAlias">Alias</string>
+    <string name="btnCancelar">Cancelar</string>
+    <string name="title_activity_registro">RegistroActivity</string>
 
 </resources>
