@@ -15,3 +15,8 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+//-------------------------------------------
+// RESTful Controllers
+//-------------------------------------------
+Route::controller('pais', 'PaisController');
