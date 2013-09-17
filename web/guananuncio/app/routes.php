@@ -21,3 +21,4 @@ Route::get('/', function()
 //-------------------------------------------
 Route::controller('pais', 'PaisController');
 Route::controller('usuario', 'UsuarioController');
+Route::controller('anuncio', 'AnuncioController');

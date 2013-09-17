@@ -44,6 +44,18 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('auth.token', function()
+{
+	$name = Input::get('usuario');
+	$token = Input::get('token');
+	try {
+		Usuario::where('nombre','=',$name)
+		         ->where('token','=',$token)->firstOrFail();
+	}catch(Exception $e) {
+		return Response::json(array('estado'=>-2,'errors'=>array('mensaje'=>'Usuario no autenticado')));
+	}
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter

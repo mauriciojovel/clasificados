@@ -9,7 +9,7 @@ class Usuario extends ValidatorEloquent {
 	protected $rules = array(
 		'nombre'=>'required|min:5|max:80',
 		'correo_electronico'=>'required|email',
-		'clave'=>'required',
+		'clave'=>'required|min:32',
 		'latitud'=>'required|integer',
 		'altitud'=>'required|integer',
 		'pais_id'=>'required|integer',

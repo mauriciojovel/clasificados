@@ -2,6 +2,8 @@
 class AutheticatedController extends BaseController {
 	public function __construct()
     {
-        //$this->beforeFilter('auth');
+    	if(Request::is('anuncio/*')) {
+        	$this->beforeFilter('auth.token');
+    	}
     }
 }
