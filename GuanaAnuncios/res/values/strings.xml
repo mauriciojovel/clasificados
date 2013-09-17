@@ -17,5 +17,10 @@
     <string name="btnCancelar">Cancelar</string>
     <string name="title_activity_registro">RegistroActivity</string>
     <string name="title_activity_publicar_anuncio">PublicarAnuncioActivity</string>
+    <string name="seleccion_categoria">Seleccione una categoría</string>
+    <string name="descripcion_articulo">Descripción del artículo</string>
+    <string name="precio_articulo">Precio</string>
+    <string name="correo_contacto">Correo de contacto</string>
+    <string name="telefono_contacto">Teléfono de contacto</string>
 
 </resources>
