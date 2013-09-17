@@ -20,3 +20,4 @@ Route::get('/', function()
 // RESTful Controllers
 //-------------------------------------------
 Route::controller('pais', 'PaisController');
+Route::controller('usuario', 'UsuarioController');
