@@ -41,11 +41,16 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 	public static final String METODO_GET = "GET";
 	private final String ENCODING = "utf-8";
 	private OnFinishDownload<T> listener;
+	private OnFinishDownloadJSONObject<T> listenerJO;
 	
 	private boolean jsonArray;
 	
 	public interface OnFinishDownload<T> {
 		public void onFinishDownload(T json);
+	}
+	
+	public interface OnFinishDownloadJSONObject<T> {
+		public void onFinishDownloadJSONObject(T json);
 	}
 	
 	public JSONDownloaderTask(String url, String metodo,
@@ -73,15 +78,30 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 		this.jsonArray = false;
 	}
 	
+	public JSONDownloaderTask(String url, String metodo,
+			List<NameValuePair> parametrosLista, OnFinishDownloadJSONObject<T> listener) {
+		this.url = url;
+		this.metodo = metodo;
+		this.parametrosLista = parametrosLista;
+		this.listenerJO =listener;
+		this.jsonArray = false;
+	}
+	
 	public void setOnFinishDownload(OnFinishDownload<T> listener) {
 		this.listener = listener;
 	}
 	
+	public void setOnFinishDownloadJSONObject(OnFinishDownloadJSONObject<T> listener) {
+		this.listenerJO = listener;
+	}
+
 	@Override
 	protected void onPostExecute(T result) {
 		//super.onPostExecute(result);
 		if(listener != null) {
 			listener.onFinishDownload(result);
+		}else if(listenerJO != null) {
+			listenerJO.onFinishDownloadJSONObject(result);
 		}
 	}
 	
