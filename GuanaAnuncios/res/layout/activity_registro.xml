@@ -7,45 +7,31 @@
     <Spinner
         android:id="@+id/spnPaises"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/regCorreo" />
+        android:prompt="@string/lbl_seleccione" />
 
     <EditText
         android:id="@+id/edtRegCorreo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/regCorreo"
         android:inputType="textEmailAddress" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/regPass" />
 
     <EditText
         android:id="@+id/edtRegPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/regPass"
         android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/regAlias" />
 
     <EditText
         android:id="@+id/edtRegAlias"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/regAlias"
         android:imeOptions="actionDone"
         android:inputType="text" />
 

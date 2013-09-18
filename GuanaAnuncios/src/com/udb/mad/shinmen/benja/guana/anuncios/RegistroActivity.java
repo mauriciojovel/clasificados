@@ -1,14 +1,13 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionUsuariosImpl;
-import com.udb.mad.shinmen.benja.guana.anuncios.adapters.PaisCustomAdapter;
-
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,26 +17,23 @@ import android.view.View.OnKeyListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
-import android.annotation.TargetApi;
-import android.os.Build;
+
+import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionUsuariosImpl;
 
 public class RegistroActivity extends ActionBarActivity implements
-		OnClickListener,OnEditorActionListener,OnKeyListener {
+		OnClickListener,OnEditorActionListener,OnKeyListener,OnItemSelectedListener {
 
 	private EditText edtRegCorreo, edtRegPass, edtRegAlias;
 	private Spinner spnPaises;
-	private PaisCustomAdapter adapter;
 	private String codigoPais;
 	private Button btnRegistrar, btnCancelar;
+	private int spinnerPositionSelected = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +49,27 @@ public class RegistroActivity extends ActionBarActivity implements
 		btnRegistrar = (Button) findViewById(R.id.btnRegistrar);
 		btnCancelar = (Button) findViewById(R.id.btnCancelar);
 				
-		addItemsOnSpinner();
-
+		/*poblando el spinner de paises*/
+		if(savedInstanceState!=null){
+			spinnerPositionSelected = savedInstanceState.getInt("position");
+		}
+		
+		addItemsOnSpinner(spnPaises);
+		
 		btnRegistrar.setOnClickListener(this);
 		btnCancelar.setOnClickListener(this);
 		edtRegAlias.setOnEditorActionListener(this);
 		edtRegAlias.setOnKeyListener(this);
+		spnPaises.setOnItemSelectedListener(this);
 
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	  super.onSaveInstanceState(savedInstanceState);
+	  
+	  savedInstanceState.putInt("position", spinnerPositionSelected);
+	  
 	}
 
 	@Override
@@ -81,7 +91,7 @@ public class RegistroActivity extends ActionBarActivity implements
 				&& !edtRegCorreo.getText().toString().equals("")
 				&& !edtRegPass.getText().toString().equals("")) {
 			
-			Map<String, String> map = gu.registrarUsuario(new Long(codigoPais),
+			Map<String, String> map = gu.registrarUsuario(Long.valueOf(codigoPais),
 					edtRegCorreo.getText().toString(), edtRegPass.getText()
 							.toString(), edtRegAlias.getText().toString());
 
@@ -105,22 +115,12 @@ public class RegistroActivity extends ActionBarActivity implements
 		}
 	}
 
-	private void addItemsOnSpinner() {
-
-		ArrayList<Map<String, Object>> paisesList = new ArrayList<Map<String, Object>>();
+	private void addItemsOnSpinner(Spinner spnPaises) {
 
 		GestionUsuariosImpl gu = new GestionUsuariosImpl();
-		List<Map<String, Object>> paises = gu.obtenerPaises();
-
-		for (Map<String, Object> pais : paises) {
-
-			paisesList.add(pais);
-		}
-
-		adapter = new PaisCustomAdapter(this, R.layout.pais_spinner_layout,
-				paisesList);
-
-		spnPaises.setAdapter(adapter);
+		
+		/*Aqui se obtinen los paises mediante JSON y se puebla el spinner*/
+		gu.obtenerPoblarPaises(spnPaises, R.layout.pais_spinner_layout, this, spinnerPositionSelected);
 
 		spnPaises.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -194,6 +194,18 @@ public class RegistroActivity extends ActionBarActivity implements
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		
+		spinnerPositionSelected = pos;
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -22,5 +22,6 @@
     <string name="precio_articulo">Precio</string>
     <string name="correo_contacto">Correo de contacto</string>
     <string name="telefono_contacto">Teléfono de contacto</string>
+    <string name="lbl_seleccione">Seleccione</string>
 
 </resources>
