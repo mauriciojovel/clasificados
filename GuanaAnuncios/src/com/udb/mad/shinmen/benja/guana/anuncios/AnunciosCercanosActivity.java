@@ -3,7 +3,6 @@ package com.udb.mad.shinmen.benja.guana.anuncios;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;

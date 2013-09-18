@@ -1,14 +1,9 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
-import java.util.Map;
-
-import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionUsuariosImpl;
-
-import android.os.Bundle;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -19,8 +14,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
+
+import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionLoginImpl;
 
 public class LoginActivity extends ActionBarActivity implements
 		OnClickListener, OnEditorActionListener, OnKeyListener {
@@ -87,32 +84,13 @@ public class LoginActivity extends ActionBarActivity implements
 
 	private void logear(String usuario, String pass) {
 
-		GestionUsuariosImpl gu = new GestionUsuariosImpl();
-
-		Map<String, String> map = gu.loginUsuario(usuario, pass);
-
-		String resultado = map.get("resultado");
-
-		if (resultado.equals("1")) { // logeado exitosamente
-
-			Toast.makeText(this, "Logueado!!..", Toast.LENGTH_SHORT).show();
-
-			/* Guardando el token en las shared preferences */
-
-			String token = map.get("token");
-
-			SharedPreferences prefs = getSharedPreferences(
-					"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
-
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString("token", token);
-			editor.commit();
-
-		} else if (resultado.equals("2")) {
-			Toast.makeText(this, "Error en logueo!!..", Toast.LENGTH_SHORT)
-					.show();
-		}
-
+		GestionLoginImpl gl = new GestionLoginImpl();
+		
+		String url = getResources().getString(R.string.loginService);
+		SharedPreferences prefs = getSharedPreferences(
+				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
+		
+		gl.loginUsuario(usuario, pass, url, prefs, this);		
 	}
 	
 	@Override
