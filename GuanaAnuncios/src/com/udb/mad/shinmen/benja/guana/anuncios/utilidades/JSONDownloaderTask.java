@@ -8,12 +8,16 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.udb.mad.shinmen.benja.guana.anuncios.RegistroActivity;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -28,7 +32,7 @@ import android.util.Log;
  * 
  *
  */
-public class JSONDownloaderTask extends AsyncTask<String, String, JSONArray> {
+public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 
 	private String url;
 	private String metodo;
@@ -36,10 +40,12 @@ public class JSONDownloaderTask extends AsyncTask<String, String, JSONArray> {
 	public static final String METODO_POST = "POST";
 	public static final String METODO_GET = "GET";
 	private final String ENCODING = "utf-8";
-	private OnFinishDownload listener;
+	private OnFinishDownload<T> listener;
 	
-	public interface OnFinishDownload {
-		public void onFinishDownload(JSONArray json);
+	private boolean jsonArray;
+	
+	public interface OnFinishDownload<T> {
+		public void onFinishDownload(T json);
 	}
 	
 	public JSONDownloaderTask(String url, String metodo,
@@ -47,34 +53,54 @@ public class JSONDownloaderTask extends AsyncTask<String, String, JSONArray> {
 		this.url = url;
 		this.metodo = metodo;
 		this.parametrosLista = parametrosLista;
+		this.jsonArray = false;
 	}
 	
 	public JSONDownloaderTask(String url, String metodo,
-			List<NameValuePair> parametrosLista, OnFinishDownload listener) {
+			List<NameValuePair> parametrosLista, boolean jsonArray) {
+		this.url = url;
+		this.metodo = metodo;
+		this.parametrosLista = parametrosLista;
+		this.jsonArray = jsonArray;
+	}
+	
+	public JSONDownloaderTask(String url, String metodo,
+			List<NameValuePair> parametrosLista, OnFinishDownload<T> listener) {
 		this.url = url;
 		this.metodo = metodo;
 		this.parametrosLista = parametrosLista;
 		this.listener =listener;
+		this.jsonArray = false;
 	}
 	
-	public void setOnFinishDownload(OnFinishDownload listener) {
+	public void setOnFinishDownload(OnFinishDownload<T> listener) {
 		this.listener = listener;
 	}
 	
 	@Override
-	protected void onPostExecute(JSONArray result) {
+	protected void onPostExecute(T result) {
 		//super.onPostExecute(result);
 		if(listener != null) {
 			listener.onFinishDownload(result);
 		}
 	}
+	
+	
+	public boolean isJsonArray() {
+		return jsonArray;
+	}
 
+	public void setJsonArray(boolean jsonArray) {
+		this.jsonArray = jsonArray;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-	protected JSONArray doInBackground(String... parametros) {
+	protected T doInBackground(String... parametros) {
 		HttpResponse response = null;
 		HttpEntity entity = null;
 		InputStream inputStream = null;
-		JSONArray jsonArray = null;
+		T jsonData = null;
 		String json = "";
 		try {
 			DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -93,24 +119,36 @@ public class JSONDownloaderTask extends AsyncTask<String, String, JSONArray> {
 			    HttpGet get = new HttpGet(url);
 			    response = httpClient.execute(get);
 			}
-			entity = response.getEntity();
-			inputStream = entity.getContent();
-			// obtuvimos respuesta, a transformar...
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					inputStream, ENCODING), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if (statusCode == 200) {
+				entity = response.getEntity();
+				inputStream = entity.getContent();
+				// obtuvimos respuesta, a transformar...
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						inputStream, ENCODING), 8);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				inputStream.close();
+				json = sb.toString();
+				if(isJsonArray()) {
+					jsonData = (T) new JSONArray(json);
+				} else {
+					jsonData = (T) new JSONObject(json);
+				}
+			} else {
+				Log.e(RegistroActivity.class.toString(),
+						"Failed to download JSON");
 			}
-			inputStream.close();
-			json = sb.toString();
-			jsonArray = new JSONArray(json);
+			
 		}catch (Exception e) {
 			Log.e("JSON Downloader", "Ocurrio un error al parsear los datos"
 					+ e.toString());
 		}
-		return jsonArray;
+		return jsonData;
 	}
 
 }
