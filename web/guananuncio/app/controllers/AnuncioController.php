@@ -60,4 +60,23 @@ class AnuncioController extends AutheticatedController {
     		return Response::json(array('estado'=>0, 'errors'=>array('mensaje'=>'Error inesperado, vuelva a intentar')));
     	}
     }
+
+    public function getAnunciosbusqueda($start, $limit) {
+        return $this->postAnunciosBusqueda($start, $limit);
+    }
+
+    public function postAnunciosbusqueda($start, $limit) {
+        $categoria = Input::get('categoria');
+        $texto = Input::get('texto');
+        $query = Anuncio::where('es_activo','=','1');
+        if(isset($categoria)) {
+            $query->where('categoria_id','=',$categoria);
+        }
+        if(isset($texto)) {
+            $query->where('titulo','like', '%'.$texto.'%')
+                  ->orWhere('descripcion', 'like', '%'.$texto.'%');
+        }
+        $anuncios = $query->skip($start*$limit)->take($limit)->get();
+        return Response::json($anuncios);
+    }
 }

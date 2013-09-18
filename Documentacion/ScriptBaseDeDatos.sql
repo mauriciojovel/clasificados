@@ -2,16 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-DROP SCHEMA IF EXISTS `guananunciosdb` ;
-CREATE SCHEMA IF NOT EXISTS `guananunciosdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `guananunciosdb` ;
 
 -- -----------------------------------------------------
--- Table `guananunciosdb`.`pais`
+-- Table `pais`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `guananunciosdb`.`pais` ;
+DROP TABLE IF EXISTS `pais` ;
 
-CREATE TABLE IF NOT EXISTS `guananunciosdb`.`pais` (
+CREATE TABLE IF NOT EXISTS `pais` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
@@ -19,11 +16,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `guananunciosdb`.`usuario`
+-- Table `usuario`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `guananunciosdb`.`usuario` ;
+DROP TABLE IF EXISTS `usuario` ;
 
-CREATE TABLE IF NOT EXISTS `guananunciosdb`.`usuario` (
+CREATE TABLE IF NOT EXISTS `usuario` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `pais_id` BIGINT NOT NULL,
   `nombre` VARCHAR(16) NOT NULL,
@@ -32,23 +29,25 @@ CREATE TABLE IF NOT EXISTS `guananunciosdb`.`usuario` (
   `latitud` INT NOT NULL,
   `altitud` INT NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `token` VARCHAR(64) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_usuario_pais_idx` (`pais_id` ASC),
   UNIQUE INDEX `unq_nombre_usuario` (`nombre` ASC),
   UNIQUE INDEX `unq_correo_electronico` (`correo_electronico` ASC),
   CONSTRAINT `fk_usuario_pais`
     FOREIGN KEY (`pais_id`)
-    REFERENCES `guananunciosdb`.`pais` (`id`)
+    REFERENCES `pais` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `guananunciosdb`.`categoria`
+-- Table `categoria`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `guananunciosdb`.`categoria` ;
+DROP TABLE IF EXISTS `categoria` ;
 
-CREATE TABLE IF NOT EXISTS `guananunciosdb`.`categoria` (
+CREATE TABLE IF NOT EXISTS `categoria` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
@@ -56,11 +55,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `guananunciosdb`.`anuncio`
+-- Table `anuncio`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `guananunciosdb`.`anuncio` ;
+DROP TABLE IF EXISTS `anuncio` ;
 
-CREATE TABLE IF NOT EXISTS `guananunciosdb`.`anuncio` (
+CREATE TABLE IF NOT EXISTS `anuncio` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `usuario_id` BIGINT NOT NULL,
   `categoria_id` BIGINT NOT NULL,
@@ -68,28 +67,30 @@ CREATE TABLE IF NOT EXISTS `guananunciosdb`.`anuncio` (
   `descripcion` VARCHAR(750) NOT NULL,
   `fecha_creacion` DATETIME NOT NULL,
   `es_activo` TINYINT NOT NULL,
+  `precio` DOUBLE NULL,
+  `telefono` VARCHAR(15) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_anuncio_usuario1_idx` (`usuario_id` ASC),
   INDEX `fk_anuncio_categoria1_idx` (`categoria_id` ASC),
   CONSTRAINT `fk_anuncio_usuario1`
     FOREIGN KEY (`usuario_id`)
-    REFERENCES `guananunciosdb`.`usuario` (`id`)
+    REFERENCES `usuario` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_anuncio_categoria1`
     FOREIGN KEY (`categoria_id`)
-    REFERENCES `guananunciosdb`.`categoria` (`id`)
+    REFERENCES `categoria` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `guananunciosdb`.`imagen`
+-- Table `imagen`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `guananunciosdb`.`imagen` ;
+DROP TABLE IF EXISTS `imagen` ;
 
-CREATE TABLE IF NOT EXISTS `guananunciosdb`.`imagen` (
+CREATE TABLE IF NOT EXISTS `imagen` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `anuncio_id` BIGINT NOT NULL,
   `imagen` BLOB NOT NULL,
@@ -98,34 +99,35 @@ CREATE TABLE IF NOT EXISTS `guananunciosdb`.`imagen` (
   INDEX `fk_imagen_anuncio1_idx` (`anuncio_id` ASC),
   CONSTRAINT `fk_imagen_anuncio1`
     FOREIGN KEY (`anuncio_id`)
-    REFERENCES `guananunciosdb`.`anuncio` (`id`)
+    REFERENCES `anuncio` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-SET SQL_MODE = '';
-GRANT USAGE ON *.* TO guananuncio;
- DROP USER guananuncio;
-SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-CREATE USER 'guananuncio' IDENTIFIED BY 'anuncio$2013';
-
-GRANT ALL ON `guananunciosdb`.* TO 'guananuncio';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
--- Data for table `guananunciosdb`.`pais`
+-- Data for table `pais`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `guananunciosdb`;
-INSERT INTO `guananunciosdb`.`pais` (`id`, `nombre`) VALUES (1, 'El Salvador');
-INSERT INTO `guananunciosdb`.`pais` (`id`, `nombre`) VALUES (2, 'Guatemala');
-INSERT INTO `guananunciosdb`.`pais` (`id`, `nombre`) VALUES (3, 'Costa Rica');
-INSERT INTO `guananunciosdb`.`pais` (`id`, `nombre`) VALUES (4, 'Nicaragua');
-INSERT INTO `guananunciosdb`.`pais` (`id`, `nombre`) VALUES (5, 'Honduras');
-INSERT INTO `guananunciosdb`.`pais` (`id`, `nombre`) VALUES (6, 'Panama');
+INSERT INTO `pais` (`id`, `nombre`) VALUES (1, 'El Salvador');
+INSERT INTO `pais` (`id`, `nombre`) VALUES (2, 'Guatemala');
+INSERT INTO `pais` (`id`, `nombre`) VALUES (3, 'Costa Rica');
+INSERT INTO `pais` (`id`, `nombre`) VALUES (4, 'Nicaragua');
+INSERT INTO `pais` (`id`, `nombre`) VALUES (5, 'Honduras');
+INSERT INTO `pais` (`id`, `nombre`) VALUES (6, 'Panama');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `usuario`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `usuario` (`id`, `pais_id`, `nombre`, `correo_electronico`, `clave`, `latitud`, `altitud`, `create_time`, `token`) VALUES (1, 1, 'test', 'test@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 50, 50, NULL, 'e10adc3949ba59abbe56e057f20f883e');
 
 COMMIT;
 
