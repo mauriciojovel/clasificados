@@ -36,12 +36,37 @@ public class JSONDownloaderTask extends AsyncTask<String, String, JSONArray> {
 	public static final String METODO_POST = "POST";
 	public static final String METODO_GET = "GET";
 	private final String ENCODING = "utf-8";
-
+	private OnFinishDownload listener;
+	
+	public interface OnFinishDownload {
+		public void onFinishDownload(JSONArray json);
+	}
+	
 	public JSONDownloaderTask(String url, String metodo,
 			List<NameValuePair> parametrosLista) {
 		this.url = url;
 		this.metodo = metodo;
 		this.parametrosLista = parametrosLista;
+	}
+	
+	public JSONDownloaderTask(String url, String metodo,
+			List<NameValuePair> parametrosLista, OnFinishDownload listener) {
+		this.url = url;
+		this.metodo = metodo;
+		this.parametrosLista = parametrosLista;
+		this.listener =listener;
+	}
+	
+	public void setOnFinishDownload(OnFinishDownload listener) {
+		this.listener = listener;
+	}
+	
+	@Override
+	protected void onPostExecute(JSONArray result) {
+		//super.onPostExecute(result);
+		if(listener != null) {
+			listener.onFinishDownload(result);
+		}
 	}
 
 	@Override
