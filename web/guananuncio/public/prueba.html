@@ -23,7 +23,6 @@
 		<style>
 			body {
 			  padding: 10px;
-			  padding-top: 50px;
 			}
 			.starter-template {
 			  padding: 40px 15px;
@@ -37,10 +36,68 @@
 	<body>
 		<div class="panel panel-info">
 		  <div class="panel-heading">
+		    <h3 class="panel-title">Busqueda Anuncio Cercanos</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://localhost/guananuncio/index.php/anuncio/anuncioscercanos/0/25" method="POST" class="form-horizontal">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Texto</label><div class="col-lg-10"><input class="form-control" name="texto"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Latitud</label><div class="col-lg-10"><input class="form-control" name="latitud" value="50"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Altitud</label><div class="col-lg-10"><input class="form-control" name="altitud" value="50"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Guardar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Busqueda Anuncio</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://localhost/guananuncio/index.php/anuncio/anunciosbusqueda/0/25" method="POST" class="form-horizontal">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Texto</label><div class="col-lg-10"><input class="form-control" name="texto"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Guardar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
 		    <h3 class="panel-title">Datos</h3>
 		  </div>
 		  <div class="panel-body">
-		    <form action="http://192.168.1.29:81/guananuncio/index.php/usuario/save" method="POST" class="form-horizontal">
+		    <form action="http://localhost/guananuncio/index.php/usuario/save" method="POST" class="form-horizontal">
 		    	<div class="form-group">
 					<label class="col-lg-2 control-label">Nombre</label><div class="col-lg-10"><input class="form-control" name="nombre"/></div>
 				</div>

@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 class AnuncioController extends AutheticatedController {
+    protected $rangeLatitud = 1000;
+    protected $rangeAltitud = 1000;
 
 	public function getCategorias() {
 		return 'Denegado';
@@ -69,14 +71,53 @@ class AnuncioController extends AutheticatedController {
         $categoria = Input::get('categoria');
         $texto = Input::get('texto');
         $query = Anuncio::where('es_activo','=','1');
-        if(isset($categoria)) {
+        if(isset($categoria) && $categoria != '') {
             $query->where('categoria_id','=',$categoria);
         }
-        if(isset($texto)) {
-            $query->where('titulo','like', '%'.$texto.'%')
+        if(isset($texto) && $texto != '') {
+            $query->where(function($q) use($texto) {
+                $q->where('titulo','like', '%'.$texto.'%')
                   ->orWhere('descripcion', 'like', '%'.$texto.'%');
+            });
         }
         $anuncios = $query->skip($start*$limit)->take($limit)->get();
         return Response::json($anuncios);
+        //$queries = DB::getQueryLog();
+        //$last_query = end($queries);
+        //return $last_query;
+    }
+
+    public function postAnuncioscercanos($start, $limit) {
+        $altitud = Input::get('altitud');
+        $latitud = Input::get('latitud');
+        $categoria = Input::get('categoria');
+        $texto = Input::get('texto');
+        $query = Anuncio::join('usuario','usuario.id','=','anuncio.usuario_id')
+            ->where('es_activo','=','1');
+
+        if(isset($categoria) && $categoria != '') {
+            $query->where('categoria_id','=',$categoria);
+        }
+
+        if(isset($texto) && $texto != '') {
+            $query->where(function($q) use($texto) {
+                $q->where('titulo','like', '%'.$texto.'%')
+                  ->orWhere('descripcion', 'like', '%'.$texto.'%');
+            });
+        }
+
+        $query->where('usuario.altitud','>=',$altitud-$this->rangeAltitud);
+        $query->where('usuario.altitud','<=',$altitud+$this->rangeAltitud);
+        $query->where('usuario.latitud','>=',$latitud-$this->rangeLatitud);
+        $query->where('usuario.latitud','<=',$latitud+$this->rangeLatitud);
+        $query->select('anuncio.titulo', 'anuncio.descripcion', 'anuncio.fecha_creacion'
+            , 'anuncio.es_activo', 'anuncio.precio'
+            , 'anuncio.telefono', 'usuario.latitud', 'usuario.altitud');
+
+        $anuncios = $query->orderBy('anuncio.id','desc')->skip($start*$limit)->take($limit)->get();
+        return Response::json($anuncios);
+        //$queries = DB::getQueryLog();
+        //$last_query = end($queries);
+        //return $last_query;
     }
 }
