@@ -162,6 +162,8 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 			} else {
 				Log.e(RegistroActivity.class.toString(),
 						"Failed to download JSON");
+				
+				jsonData = (T) new JSONObject("{'estado':'0','errors':{'status':'Status code = "+ statusCode +"'}}");
 			}
 			
 		}catch (Exception e) {

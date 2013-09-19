@@ -9,10 +9,12 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.View;
 import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.AnunciosCercanosActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
+import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
 
@@ -27,6 +29,7 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 	private JSONDownloaderTask<JSONObject> jsonTask;
 	private SharedPreferences prefs;
 	private LoginActivity activity;
+	private String usuario;
 	
 	
 	@Override
@@ -34,6 +37,7 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 
 		this.prefs = prefs;
 		this.activity = activity;
+		this.usuario = usuario;
 		
 		String encryptedPass = MD5Utility.md5(password);
 				
@@ -64,6 +68,7 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 				 * */
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(TOKEN, token);
+				editor.putString(USUARIO, usuario);
 				editor.commit();
 				
 				/*Si el logeo es exitoso se inicia la siguiente actividad*/
@@ -74,6 +79,8 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 				activity.finish();
 				
 			}else{
+				
+				activity.findViewById(R.id.progressBarLogin).setVisibility(View.GONE);
 				
 				Toast.makeText(activity, "Usuario/Contraseña invalidos!!..", Toast.LENGTH_SHORT)
 				.show();

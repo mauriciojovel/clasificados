@@ -49,15 +49,16 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
             vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);
  
         TextView title = (TextView)vi.findViewById(R.id.title);
-        TextView description = (TextView)vi.findViewById(R.id.description); 
+        TextView description = (TextView)vi.findViewById(R.id.description);
+        TextView codigo = (TextView) vi.findViewById(R.id.codigo);
  
         HashMap<String, Object> dato = new HashMap<String, Object>();
         dato = data.get(position);
  
         // Setting all values in listview
         title.setText(String.valueOf(dato.get("titulo")));
-        description.setText((String)dato.get("descripcion"));
-        
+        description.setText(String.valueOf(dato.get("descripcion")));
+        codigo.setText(String.valueOf(dato.get("codigo")));
         
         return vi;
 	}
