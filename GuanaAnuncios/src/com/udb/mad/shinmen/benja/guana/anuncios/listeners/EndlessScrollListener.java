@@ -10,6 +10,22 @@ public class EndlessScrollListener implements OnScrollListener {
 	private int previousTotal = 0;
 	private boolean loading = true;
 	private onScrollEndListener onScrollEnd;
+	
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public int getPreviousTotal() {
+		return previousTotal;
+	}
+
+	public void setPreviousTotal(int previousTotal) {
+		this.previousTotal = previousTotal;
+	}
 
 	public interface onScrollEndListener {
 		void onEnd(int page);

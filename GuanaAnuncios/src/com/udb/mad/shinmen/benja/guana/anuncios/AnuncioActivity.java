@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnunciosListFragment;
+
 public class AnuncioActivity extends ActionBarActivity {
 
 	@Override
@@ -20,23 +22,27 @@ public class AnuncioActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.anuncio, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case R.id.action_nuevo_anuncio:
-	        	openPublicarAnuncioActivity();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_nuevo_anuncio:
+			openPublicarAnuncioActivity();
+			return true;
+		case R.id.action_refrescar:
+			AnunciosListFragment alf = (AnunciosListFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.listAnuncios);
+			alf.refrescarLista();
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
-	private void openPublicarAnuncioActivity(){
+	private void openPublicarAnuncioActivity() {
 		Intent i = new Intent();
 		i.setClass(this, PublicarAnuncioActivity.class);
 		startActivity(i);
 	}
-	
+
 }

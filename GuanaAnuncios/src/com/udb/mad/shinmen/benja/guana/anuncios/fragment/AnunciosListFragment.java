@@ -29,6 +29,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	 */
 	private static final long serialVersionUID = -8964105318347238707L;
 
+	EndlessScrollListener scrollListener;
 	List<Anuncio> anuncios;
 	AnuncioCustomAdapter adapter;
 	Activity activity;
@@ -51,13 +52,22 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		token = /* prefs.getString(GestionLoginImpl.TOKEN,null) */"e10adc3949ba59abbe56e057f20f883e";
 		usuario = /* prefs.getString(GestionLoginImpl.USUARIO, null) */"test";
 
-		getListView().setOnScrollListener(
-				new EndlessScrollListener(new onScrollEndListener() {
-					@Override
-					public void onEnd(int page) {
-						cargarAnuncios(page);
-					}
-				}));
+		if(adapter == null){
+			adapter = new AnuncioCustomAdapter(getActivity());
+		}
+		
+		setListAdapter(adapter);
+		
+		scrollListener = new EndlessScrollListener(new onScrollEndListener() {
+			@Override
+			public void onEnd(int page) {
+				cargarAnuncios(page);
+			}
+		});
+		
+		getListView().setOnScrollListener(scrollListener);
+		
+		setListShownNoAnimation(false);
 
 		cargarAnuncios(page);
 	}
@@ -83,13 +93,22 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 
 	}
 
+	public void refrescarLista(){
+		setListShownNoAnimation(false);
+		page = 0;
+		adapter.clear();
+		scrollListener.setCurrentPage(page);
+		scrollListener.setPreviousTotal(0);
+		cargarAnuncios(0);
+	}
+	
 	private class BusquedaAnunciosListener implements
 			JSONDownloaderTask.OnFinishDownload<JSONArray> {
 
 		@Override
 		public void onFinishDownload(JSONArray json) {
 			Anuncio anuncio;
-
+			
 			try {
 				for (int i = 0; i < json.length(); i++) {
 
@@ -99,18 +118,14 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 					anuncio.setCodigoAnuncio(jsonObject.getString("id"));
 					anuncio.setTituloAnuncio(jsonObject.getString("titulo"));
 					anuncio.setDescripcionAnuncio(jsonObject.getString("descripcion"));
-					anuncios.add(anuncio);
+					adapter.add(anuncio);
 				}
 			} catch (Exception e) {
 				Log.e("error", e.getMessage());
 			}
-
-			if(adapter == null){
-				adapter = new AnuncioCustomAdapter(getActivity(), anuncios);
-				setListAdapter(adapter);
-			}else{
-				adapter.notifyDataSetChanged();
-			}
+			
+			adapter.notifyDataSetChanged();
+			AnunciosListFragment.this.setListShownNoAnimation(true);
 		}
 	}
 }
