@@ -1,6 +1,10 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -22,7 +26,6 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionUsuariosImpl;
-import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
 
 public class RegistroActivity extends ActionBarActivity implements
 		OnClickListener, OnEditorActionListener, OnKeyListener,
@@ -59,7 +62,7 @@ public class RegistroActivity extends ActionBarActivity implements
 		btnCancelar.setOnClickListener(this);
 		edtRegAlias.setOnEditorActionListener(this);
 		edtRegAlias.setOnKeyListener(this);
-		//spnPaises.setOnItemSelectedListener(this);
+		// spnPaises.setOnItemSelectedListener(this);
 
 	}
 
@@ -86,16 +89,30 @@ public class RegistroActivity extends ActionBarActivity implements
 
 		GestionUsuariosImpl gu = new GestionUsuariosImpl(this);
 
-		if (codigoPais != null && !codigoPais.equals("") && !codigoPais.equals("-1") 
+		if (codigoPais != null && !codigoPais.equals("")
+				&& !codigoPais.equals("-1")
 				&& !edtRegAlias.getText().toString().equals("")
 				&& !edtRegCorreo.getText().toString().equals("")
 				&& !edtRegPass.getText().toString().equals("")) {
 
-			String encryptedPass = MD5Utility.md5(edtRegPass.getText()
-					.toString());
+			SharedPreferences prefs = getSharedPreferences(
+					"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
+
+			/* Obteniendo la longitud y latitud del usuario */
+			LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			Location location = lm
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Double longitud = 0D;
+			Double latitud = 0D;
+			if (location != null) {
+				longitud = location.getLongitude();
+				latitud = location.getLatitude();
+			}
 
 			gu.registrarUsuario(codigoPais, edtRegCorreo.getText().toString(),
-					encryptedPass, edtRegAlias.getText().toString());
+					edtRegPass.getText().toString(), edtRegAlias.getText()
+							.toString(), prefs, latitud.toString(), longitud
+							.toString());
 
 		} else {
 			Toast.makeText(this, "Por favor llene todos los campos!",
@@ -107,7 +124,7 @@ public class RegistroActivity extends ActionBarActivity implements
 
 		GestionUsuariosImpl gu = new GestionUsuariosImpl(this);
 
-		String url = getResources().getString(R.string.paisesLocalService);
+		String url = getResources().getString(R.string.paisesService);
 
 		/* Aqui se obtinen los paises mediante JSON y se puebla el spinner */
 		gu.obtenerPoblarPaises(spnPaises, R.layout.pais_spinner_layout,
