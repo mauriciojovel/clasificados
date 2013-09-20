@@ -1,8 +1,10 @@
 package com.udb.mad.shinmen.benja.guana.anuncios.adapters;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.LauncherActivity.ListItem;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,17 +47,15 @@ public class AnuncioCustomAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi= convertView;
         if(convertView==null)
-            vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);
+            vi = inflater.inflate(R.layout.anuncio_list_item, null);
  
-        TextView title = (TextView)vi.findViewById(R.id.title);
-        TextView description = (TextView)vi.findViewById(R.id.description);
-        TextView codigo = (TextView) vi.findViewById(R.id.codigo);
+        TextView title = (TextView)vi.findViewById(R.id.tituloAnuncio);
+       /* TextView description = (TextView)vi.findViewById(R.id.description);
+        TextView codigo = (TextView) vi.findViewById(R.id.codigo);*/
  
         Anuncio a = (Anuncio) getItem(position);
  
         title.setText(a.getTituloAnuncio());
-        description.setText(a.getDescripcionAnuncio());
-        codigo.setText(a.getCodigoAnuncio());
         
         return vi;
 	}
