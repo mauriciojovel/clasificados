@@ -18,13 +18,6 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/guana_logo" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/losginUsuario" />
-
     <EditText
         android:id="@+id/edtUsuario"
         android:layout_width="match_parent"
@@ -32,24 +25,20 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:ems="10"
+        android:hint="@string/losginUsuario"
         android:inputType="text" >
 
         <requestFocus />
     </EditText>
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_height="wrap_content"
-        android:text="@string/losginPass" />
 
     <EditText
         android:id="@+id/edtPassword"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:ems="10"
+        android:hint="@string/losginPass"
         android:imeOptions="actionDone"
         android:inputType="textPassword" />
     
@@ -68,5 +57,12 @@
         android:layout_height="wrap_content"
         android:text="@string/btnRegistrar"
         style="@style/button_text" />
+
+    <ProgressBar
+        android:id="@+id/progressBarLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible" />
 
 </LinearLayout>

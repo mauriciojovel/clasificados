@@ -1,8 +1,5 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,13 +22,15 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionUsuariosImpl;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
 
 public class RegistroActivity extends ActionBarActivity implements
-		OnClickListener,OnEditorActionListener,OnKeyListener,OnItemSelectedListener {
+		OnClickListener, OnEditorActionListener, OnKeyListener,
+		OnItemSelectedListener {
 
 	private EditText edtRegCorreo, edtRegPass, edtRegAlias;
 	private Spinner spnPaises;
-	private String codigoPais;
+	private String codigoPais = "-1";
 	private Button btnRegistrar, btnCancelar;
 	private int spinnerPositionSelected = 0;
 
@@ -48,28 +47,28 @@ public class RegistroActivity extends ActionBarActivity implements
 		spnPaises = (Spinner) findViewById(R.id.spnPaises);
 		btnRegistrar = (Button) findViewById(R.id.btnRegistrar);
 		btnCancelar = (Button) findViewById(R.id.btnCancelar);
-				
-		/*poblando el spinner de paises*/
-		if(savedInstanceState!=null){
+
+		/* poblando el spinner de paises */
+		if (savedInstanceState != null) {
 			spinnerPositionSelected = savedInstanceState.getInt("position");
 		}
-		
-		addItemsOnSpinner(spnPaises);
-		
+
+		addItemsOnSpinner();
+
 		btnRegistrar.setOnClickListener(this);
 		btnCancelar.setOnClickListener(this);
 		edtRegAlias.setOnEditorActionListener(this);
 		edtRegAlias.setOnKeyListener(this);
-		spnPaises.setOnItemSelectedListener(this);
+		//spnPaises.setOnItemSelectedListener(this);
 
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-	  super.onSaveInstanceState(savedInstanceState);
-	  
-	  savedInstanceState.putInt("position", spinnerPositionSelected);
-	  
+		super.onSaveInstanceState(savedInstanceState);
+
+		savedInstanceState.putInt("position", spinnerPositionSelected);
+
 	}
 
 	@Override
@@ -85,50 +84,43 @@ public class RegistroActivity extends ActionBarActivity implements
 
 	private void registrarUsuario() {
 
-		GestionUsuariosImpl gu = new GestionUsuariosImpl();
+		GestionUsuariosImpl gu = new GestionUsuariosImpl(this);
 
-		if (!edtRegAlias.getText().toString().equals("")
+		if (codigoPais != null && !codigoPais.equals("") && !codigoPais.equals("-1") 
+				&& !edtRegAlias.getText().toString().equals("")
 				&& !edtRegCorreo.getText().toString().equals("")
 				&& !edtRegPass.getText().toString().equals("")) {
-			
-			Map<String, String> map = gu.registrarUsuario(Long.valueOf(codigoPais),
-					edtRegCorreo.getText().toString(), edtRegPass.getText()
-							.toString(), edtRegAlias.getText().toString());
 
-			String resultado = map.get("resultado");
+			String encryptedPass = MD5Utility.md5(edtRegPass.getText()
+					.toString());
 
-			if (resultado.equals("1")) {
-				
-				Toast.makeText(this, "Registro guardado exitosamente!",
-						Toast.LENGTH_SHORT).show();
-				
-				NavUtils.navigateUpFromSameTask(this);
-			
-			} else if (resultado.equals("2")) {
-				
-				Toast.makeText(this, "Usuario existente!", Toast.LENGTH_SHORT)
-						.show();
-			}
+			gu.registrarUsuario(codigoPais, edtRegCorreo.getText().toString(),
+					encryptedPass, edtRegAlias.getText().toString());
+
 		} else {
 			Toast.makeText(this, "Por favor llene todos los campos!",
 					Toast.LENGTH_SHORT).show();
 		}
 	}
 
-	private void addItemsOnSpinner(Spinner spnPaises) {
+	private void addItemsOnSpinner() {
 
-		GestionUsuariosImpl gu = new GestionUsuariosImpl();
-		
-		/*Aqui se obtinen los paises mediante JSON y se puebla el spinner*/
-		gu.obtenerPoblarPaises(spnPaises, R.layout.pais_spinner_layout, this, spinnerPositionSelected);
+		GestionUsuariosImpl gu = new GestionUsuariosImpl(this);
+
+		String url = getResources().getString(R.string.paisesLocalService);
+
+		/* Aqui se obtinen los paises mediante JSON y se puebla el spinner */
+		gu.obtenerPoblarPaises(spnPaises, R.layout.pais_spinner_layout,
+				spinnerPositionSelected, url);
 
 		spnPaises.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View v,
 					int position, long id) {
-				
-				if(v!=null){
-					TextView txt = (TextView) v.findViewById(R.id.txtCodigoPais); 
+
+				if (v != null) {
+					TextView txt = (TextView) v
+							.findViewById(R.id.txtCodigoPais);
 					// Get selected row data to show on screen
 					codigoPais = txt.getText().toString();
 				}
@@ -178,34 +170,35 @@ public class RegistroActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		
-		if(actionId == EditorInfo.IME_ACTION_DONE){
+
+		if (actionId == EditorInfo.IME_ACTION_DONE) {
 			registrarUsuario();
 		}
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		
-		if(event.getKeyCode()==EditorInfo.IME_ACTION_DONE){
+
+		if (event.getKeyCode() == EditorInfo.IME_ACTION_DONE) {
 			registrarUsuario();
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-		
+	public void onItemSelected(AdapterView<?> parent, View view, int pos,
+			long id) {
+
 		spinnerPositionSelected = pos;
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

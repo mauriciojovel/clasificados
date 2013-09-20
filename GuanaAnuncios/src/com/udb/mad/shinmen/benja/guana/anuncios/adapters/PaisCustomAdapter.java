@@ -3,7 +3,6 @@ package com.udb.mad.shinmen.benja.guana.anuncios.adapters;
 import java.util.ArrayList;
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.udb.mad.shinmen.benja.guana.anuncios.model.PaisSpinner;
 
 public class PaisCustomAdapter extends BaseAdapter {
 
-	private Activity activity;
 	private ArrayList<Map<String, Object>> data;
 	PaisSpinner tempValues = null;
 	LayoutInflater inflater;
@@ -25,7 +23,6 @@ public class PaisCustomAdapter extends BaseAdapter {
 	public PaisCustomAdapter(RegistroActivity activity, int textViewResourceId,
 			ArrayList<Map<String, Object>> objects) {
 		
-		this.activity = activity;
 		data = objects;
 
 		inflater = (LayoutInflater) activity

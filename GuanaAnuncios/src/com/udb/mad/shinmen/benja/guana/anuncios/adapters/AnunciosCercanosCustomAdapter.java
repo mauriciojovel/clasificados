@@ -3,19 +3,15 @@ package com.udb.mad.shinmen.benja.guana.anuncios.adapters;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.udb.mad.shinmen.benja.guana.anuncios.R;
-
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.udb.mad.shinmen.benja.guana.anuncios.R;
 
 public class AnunciosCercanosCustomAdapter extends BaseAdapter{
 
@@ -53,15 +49,16 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
             vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);
  
         TextView title = (TextView)vi.findViewById(R.id.title);
-        TextView description = (TextView)vi.findViewById(R.id.description); 
+        TextView description = (TextView)vi.findViewById(R.id.description);
+        TextView codigo = (TextView) vi.findViewById(R.id.codigo);
  
         HashMap<String, Object> dato = new HashMap<String, Object>();
         dato = data.get(position);
  
         // Setting all values in listview
         title.setText(String.valueOf(dato.get("titulo")));
-        description.setText((String)dato.get("descripcion"));
-        
+        description.setText(String.valueOf(dato.get("descripcion")));
+        codigo.setText(String.valueOf(dato.get("codigo")));
         
         return vi;
 	}

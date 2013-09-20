@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="paisesService">http://guananuncio.madxdesign.com/index.php/pais</string>
+    <string name="paisesLocalService">http://192.168.1.29:81/guananuncio/index.php/pais</string>
+    <string name="loginService">http://guananuncio.madxdesign.com/index.php/usuario/autenticar</string>
+    <string name="guardarUsuarioService">http://guananuncio.madxdesign.com/index.php/usuario/save</string>
+    <string name="guardarUsuarioLocalService">http://192.168.1.29:81/guananuncio/index.php/usuario/save</string>
+    <string name="anunciosCercanosService">http://guananuncio.madxdesign.com/index.php/anuncio/anuncioscercanos/{page}/{limit}</string>
+    
+</resources>

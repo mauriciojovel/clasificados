@@ -1,30 +1,44 @@
 package com.udb.mad.shinmen.benja.guana.anuncios.adapters;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.udb.mad.shinmen.benja.guana.anuncios.AnunciosCercanosActivity;
+import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.RegistroActivity;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
 
-public class GestionUsuariosImpl implements GestionUsuarios {
+public class GestionUsuariosImpl implements GestionUsuarios,
+		JSONDownloaderTask.OnFinishDownload<JSONArray>,
+		JSONDownloaderTask.OnFinishDownloadJSONObject<JSONObject> {
+
+	public static final String EXITO = "1";
+	public static final String ID = "id";
+	public static final String NOMBRE = "nombre";
+	public static final String CODIGO_PAIS = "codigoPais";
+	public static final String RESULTADO = "resultado";
+	public static final String PAIS_ID = "pais_id";
+	public static final String CORREO_ELECTRONICO = "correo_electronico";
+	public static final String CLAVE = "clave";
+	public static final String LATITUD = "latitud";
+	public static final String ALTITUD = "altitud";
+	public static final String ESTADO = "estado";
+	public static final String TOKEN = "token";
+	public static final String USUARIO = "usuario";
 
 	ArrayList<Map<String, Object>> paises;
 	private PaisCustomAdapter adapter;
@@ -32,82 +46,63 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 	private int textViewResourceId;
 	private RegistroActivity activity;
 	public int position;
+	private JSONDownloaderTask<JSONArray> jsonTask;
+	private JSONDownloaderTask<JSONObject> jsonTaskObj;
+	private SharedPreferences prefs;
+	private String usuario;
 
-	@Override
-	public Map<String, String> loginUsuario(String usuario, String password) {
-
-		Map<String, String> result = new HashMap<String, String>();
-
-		/* Dummy data */
-		result.put("resultado", "1"); // indica que se logeo sin problemas
-
-		/*
-		 * Solo deberia pedir logearse la primera vez, en cuya accion se recibe
-		 * un token el cual se guarda en los SharedPreferences y asi la
-		 * siguiente vez que ingrese a la aplicacion no pida logeo
-		 */
-		result.put("token", "123456");
-
-		return result;
+	public GestionUsuariosImpl(RegistroActivity activity) {
+		super();
+		this.activity = activity;
 	}
 
 	@Override
-	public Map<String, String> registrarUsuario(Long pais,
-			String correoElectronicoUsuario, String claveUsuario, String alias) {
+	public void registrarUsuario(String pais, String correoElectronicoUsuario,
+			String claveUsuario, String alias, SharedPreferences prefs, String latitud, String altitud) {
 
-		Map<String, String> result = null;
+		this.prefs = prefs;
+		this.usuario = alias;
+		
+		String encryptedPass = MD5Utility.md5(claveUsuario);
+		
+		
 
-		/* Revisando si el usuario no existe ya, ya sea el alias o correo */
-		result = buscarUsuario(correoElectronicoUsuario, alias);
+		/* Lista de parametros a enviar en el POST */
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(1);
+		parametros.add(new BasicNameValuePair(PAIS_ID, pais));
+		parametros.add(new BasicNameValuePair(NOMBRE, alias));
+		parametros.add(new BasicNameValuePair(CORREO_ELECTRONICO,
+				correoElectronicoUsuario));
+		parametros.add(new BasicNameValuePair(CLAVE, encryptedPass));
+		parametros.add(new BasicNameValuePair(LATITUD, latitud));
+		parametros.add(new BasicNameValuePair(ALTITUD, altitud));
 
-		/*
-		 * si result es nulo quiere decir que no existe el usuario y se puede
-		 * crear
-		 */
-		if (result == null) {
-			/* Guardar registro */
-			result = new HashMap<String, String>();
-			result.put("resultado", "1");
-		}
+		/* URL del servicio */
+		String url = activity.getResources().getString(
+				R.string.guardarUsuarioService);
 
-		return result;
+		/* Tarea asincrona que recupera los datos */
+		jsonTaskObj = new JSONDownloaderTask<JSONObject>(url,
+				JSONDownloaderTask.METODO_POST, parametros);
+		jsonTaskObj.setOnFinishDownloadJSONObject(this);
+		jsonTaskObj.execute();
 	}
 
 	@Override
 	public void obtenerPoblarPaises(Spinner spnPaises, int textViewResourceId,
-			RegistroActivity activity, int pos) {
+			int pos, String url) {
 
 		this.spnPaises = spnPaises;
 		this.textViewResourceId = textViewResourceId;
-		this.activity = activity;
+		
 		position = pos;
 
-		new JSONTask().execute();
-
-		/*
-		 * Dummy data
-		 * 
-		 * pais.put("codigoPais", 1L); pais.put("nombre", "El Salvador");
-		 * paises.add(pais);
-		 * 
-		 * pais = new HashMap<String, Object>(); pais.put("codigoPais", 2L);
-		 * pais.put("nombre", "Guatemala"); paises.add(pais);
-		 * 
-		 * pais = new HashMap<String, Object>(); pais.put("codigoPais", 3L);
-		 * pais.put("nombre", "Honduras"); paises.add(pais);
-		 * 
-		 * pais = new HashMap<String, Object>(); pais.put("codigoPais", 4L);
-		 * pais.put("nombre", "Nicaragua"); paises.add(pais);
-		 * 
-		 * pais = new HashMap<String, Object>(); pais.put("codigoPais", 5L);
-		 * pais.put("nombre", "Costa Rica"); paises.add(pais);
-		 * 
-		 * pais = new HashMap<String, Object>(); pais.put("codigoPais", 6L);
-		 * pais.put("nombre", "Panama"); paises.add(pais);
-		 * 
-		 * /* End dummy data
-		 */
-
+		// new JSONTask().execute();
+		jsonTask = new JSONDownloaderTask<JSONArray>(url,
+				JSONDownloaderTask.METODO_GET, null);
+		jsonTask.setOnFinishDownload(this);
+		jsonTask.setJsonArray(true);
+		jsonTask.execute();
 	}
 
 	@Override
@@ -123,84 +118,105 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 
 			result = new HashMap<String, String>();
 
-			result.put("resultado", "2"); // indica que el alias o correo ya
-											// existen
+			result.put(RESULTADO, "2"); // indica que el alias o correo ya
+										// existen
 		}
 
 		return result;
 	}
 
-	private class JSONTask extends AsyncTask<Void, Void, String> {
+	@Override
+	public void onFinishDownload(JSONArray jsonArray) {
 
-		protected void onPostExecute(String string) {
-			String readFeed = string;
-
+		try {
 			paises = new ArrayList<Map<String, Object>>();
 
 			Map<String, Object> pais = new HashMap<String, Object>();
+			pais.put(CODIGO_PAIS, "-1");
+			pais.put(NOMBRE, activity.getResources().getString(R.string.lbl_seleccione));
+			paises.add(pais);
 
-			try {
+			for (int i = 0; i < jsonArray.length(); i++) {
 
-				JSONArray jsonArray = new JSONArray(readFeed);
-				
-				for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-					JSONObject jsonObject = jsonArray.getJSONObject(i);
+				pais = new HashMap<String, Object>();
+				pais.put(CODIGO_PAIS, jsonObject.getString(ID));
+				pais.put(NOMBRE, jsonObject.getString(NOMBRE));
+				paises.add(pais);
 
-					pais = new HashMap<String, Object>();
-					pais.put("codigoPais", jsonObject.getString("id"));
-					pais.put("nombre", jsonObject.getString("nombre"));
-					paises.add(pais);
-
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 
 			adapter = new PaisCustomAdapter(activity, textViewResourceId,
 					paises);
 
 			spnPaises.setAdapter(adapter);
-			
-			if(position!=0){
+
+			if (position != 0) {
 				spnPaises.setSelection(position);
 			}
-		}
 
-		@Override
-		protected String doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			return readFeed();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
 
-		public String readFeed() {
-			StringBuilder builder = new StringBuilder();
-			HttpClient client = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(
-					"http://guananuncio.madxdesign.com/index.php/pais");
-			try {
-				HttpResponse response = client.execute(httpGet);
-				StatusLine statusLine = response.getStatusLine();
-				int statusCode = statusLine.getStatusCode();
-				if (statusCode == 200) {
-					HttpEntity entity = response.getEntity();
-					InputStream content = entity.getContent();
-					BufferedReader reader = new BufferedReader(
-							new InputStreamReader(content));
-					String line;
-					while ((line = reader.readLine()) != null) {
-						builder.append(line);
-					}
-				} else {
-					Log.e(RegistroActivity.class.toString(),
-							"Failed to download JSON");
-				}
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+	@Override
+	public void onFinishDownloadJSONObject(JSONObject jsonData) {
+
+		try {
+
+			String status = jsonData.getString(ESTADO);
+
+			if (status.equals(EXITO)) {
+
+
+				 /*
+				 * Guardando el token en los shared preferences para que la proxima vez no pida logearse al usuario
+				 * sino lo envie directamente a la lista de anuncios
+				 * 
+				 * */
+				String token = jsonData.getString(TOKEN);
+				
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString(TOKEN, token);
+				editor.putString(USUARIO, usuario);
+				editor.commit();
+
+				/*Si el registro es exitoso se inicia la siguiente actividad*/
+				Intent intento = new Intent(activity, AnunciosCercanosActivity.class);
+				activity.startActivity(intento);
+				
+				/*
+				 * se termina la actividad de registro para que vuelva a la
+				 * pantalla de login
+				 */
+				activity.finish();
+
+			} else {
+
+				JSONObject errores = jsonData.getJSONObject("errors");
+
+				/*
+				 * String usuario = errores.getString("usuario"); String clave =
+				 * errores.getString("clave");
+				 */
+				Toast.makeText(activity,
+						"Error al guardar usuario: " + errores.getString("mensaje"),
+						Toast.LENGTH_LONG).show();
+				
+				Log.e(RegistroActivity.class.toString(),
+						errores.toString());
+
 			}
-			return builder.toString();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(activity,
+					"Error al guardar usuario: " + e.toString(),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 }
