@@ -47,7 +47,7 @@ class UsuarioController extends AutheticatedController {
     		$usuario->fill($input);
     		try {
     			$newToken = $this->token();
-    			$user->token = $newToken;
+    			$usuario->token = $newToken;
 	    		$usuario->save();
 	    		return Response::json(array('estado'=>'1', 'errors'=>array(),'token'=>$newToken));
 	    	} catch(Exception $e) {

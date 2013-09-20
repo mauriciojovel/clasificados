@@ -3,17 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="195dp"
+        android:layout_height="220dp"
+        android:layout_weight="1.37"
         class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/lblListadoAnuncios"
+            android:textSize="15sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBarAnuncios"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="5dp"
+            android:visibility="invisible" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lstAnuncios"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="199dp"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp"
         android:listSelector="@drawable/list_selector" >

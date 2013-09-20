@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<title>Envio de datos</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+		<meta name="description" content=""></meta>
+		<meta name="author" content=""></meta>
+		<link rel="stylesheet" href="resources/css/bootstrap.min.css" media="screen"></link>
+		<link rel="stylesheet" href="resources/css/daterangepicker-bs3.css" media="screen"></link>
+		<link rel="stylesheet" href="resources/css/datepicker.css" media="screen"></link>
+		<!--
+		<link rel="stylesheet" href="resources/css/bootstrap-datetimepicker.min.css" media="screen"></link>
+		-->
+		<!--
+		<link rel="stylesheet" href="resources/css/bootstrap-theme.min.css" media="screen"></link>
+		-->
+		
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script src="resources/js/html5shiv.js"></script>
+		  <script src="resources/js/respond.min.js"></script>
+		<![endif]-->
+		
+		<style>
+			body {
+			  padding: 10px;
+			}
+			.starter-template {
+			  padding: 40px 15px;
+			}
+			.footer {
+				font-size:0.8em;
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Busqueda Anuncio Cercanos</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://localhost/guananuncio/index.php/anuncio/anuncioscercanos/0/25" method="POST" class="form-horizontal">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Texto</label><div class="col-lg-10"><input class="form-control" name="texto"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Latitud</label><div class="col-lg-10"><input class="form-control" name="latitud" value="50"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Altitud</label><div class="col-lg-10"><input class="form-control" name="altitud" value="50"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Guardar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Busqueda Anuncio</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://localhost/guananuncio/index.php/anuncio/anunciosbusqueda/0/25" method="POST" class="form-horizontal">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Texto</label><div class="col-lg-10"><input class="form-control" name="texto"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Guardar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Datos</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://localhost/guananuncio/index.php/usuario/save" method="POST" class="form-horizontal">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Nombre</label><div class="col-lg-10"><input class="form-control" name="nombre"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Correo</label><div class="col-lg-10"><input class="form-control" name="correo_electronico"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Clave</label><div class="col-lg-10"><input class="form-control" name="clave"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Latitud</label><div class="col-lg-10"><input class="form-control" name="latitud"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Altitud</label><div class="col-lg-10"><input class="form-control" name="altitud"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Pais</label><div class="col-lg-10"><input class="form-control" name="pais_id"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Guardar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+	</body>
+</html>

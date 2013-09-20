@@ -54,8 +54,7 @@ public class LoginActivity extends ActionBarActivity implements
 	@Override
 	public void onClick(View view) {
 
-		if (btnLogin.getId() == view.getId()) {
-
+		if (btnLogin.getId() == view.getId()) {			
 			validar();
 
 		} else if (btnRegistrar.getId() == view.getId()) {
@@ -68,6 +67,7 @@ public class LoginActivity extends ActionBarActivity implements
 	}
 	
 	private void validar(){
+		findViewById(R.id.progressBarLogin).setVisibility(View.VISIBLE);
 		
 		String usuario = edtUsuario.getText().toString();
 		String pass = edtPassword.getText().toString();

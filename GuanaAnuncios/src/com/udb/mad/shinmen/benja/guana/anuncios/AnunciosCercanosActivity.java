@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -25,15 +27,21 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnunciosCercanosCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionAnunciosImpl;
 
 public class AnunciosCercanosActivity extends ActionBarActivity implements
 		OnItemClickListener, ConnectionCallbacks, OnConnectionFailedListener,
-		LocationListener {
+		LocationListener, OnScrollListener {
+
+	public static final String TOKEN = "token";
+	public static final String USUARIO = "usuario";
+
+	private int page = 0;
+	private int limit = 5;
+	public static final String PAGE_MARK = "{page}";
+	public static final String LIMIT_MARK = "{limit}";
 
 	private GoogleMap mMap;
 	ListView listview;
@@ -50,6 +58,12 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 			.setInterval(5000) // 5 seconds
 			.setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+	
+	private int visibleThreshold = 1;
+    public boolean flag_loading  = true;
+    private GestionAnunciosImpl ga;
+    
+    int firstVisibleItem, visibleItemCount, totalItemCount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,20 +75,21 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 		// Lista de anuncios cercanos
 		listview = (ListView) findViewById(R.id.lstAnuncios);
 		listview.setOnItemClickListener(this);
+		listview.setOnScrollListener(this);
 
 		// cargando la lista en el listview
-		cargarListaAnunciosCercanos();
-
-		// dibujando puntos en el mapa
-		dibujarPuntosAnuncios();
+		cargarListaAnunciosCercanos(false);
 	}
 
-	private void cargarListaAnunciosCercanos() {
+	private void cargarListaAnunciosCercanos(boolean notifyDataSetChanged) {
+		
+		findViewById(R.id.progressBarAnuncios).setVisibility(View.VISIBLE);
+		
+		if(ga == null){
+			ga = new GestionAnunciosImpl();
+		}
 
-		GestionAnunciosImpl ga = new GestionAnunciosImpl();
-
-		// latitud=13.689423119374966
-		// longitud=-89.22594312248225
+		/* Obteniendo la longitud y latitud del usuario */
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location location = lm
 				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -82,33 +97,26 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 			longitud = location.getLongitude();
 			latitud = location.getLatitude();
 		}
-		anunciosList = ga.obtenerAnunciosCercanos(longitud, latitud);
 
-		adapter = new AnunciosCercanosCustomAdapter(this, anunciosList);
-		listview.setAdapter(adapter);
+		/* Obteniendo el usuario y token de las shared preferences */
+		SharedPreferences prefs = getSharedPreferences(
+				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
+		String alias = prefs.getString(USUARIO, "");
+		String token = prefs.getString(TOKEN, "");
 
-	}
-	
-	private void dibujarPuntosAnuncios() {
+		/* URL del servicio de donde se obtienen los anuncios */
+		String url = getResources().getString(R.string.anunciosCercanosService);
+		
+		url = url.replace(PAGE_MARK, page + "");
+		url = url.replace(LIMIT_MARK, limit + "");
+		
+		/*esto es para que el adapter del listview sepa si se trata de una actualizacion
+		 * de los item de la lista*/
+		ga.notifyDataSetChanged = notifyDataSetChanged;
+		
+		anunciosList = ga.obtenerAnunciosCercanos(longitud, latitud, alias,
+				token, url, this, listview, mMap);		
 
-		if (anunciosList.size() > 0) {
-			
-			mMap.clear();
-			
-			for( HashMap<String, Object> anuncio : anunciosList ){
-				
-				CircleOptions circleOptions = new CircleOptions();
-				Double lat = Double.valueOf(anuncio.get("latitud").toString());
-				Double lon = Double.valueOf(anuncio.get("longitud").toString());
-				circleOptions.center(new LatLng(lat, lon));
-				circleOptions.fillColor(Color.RED);
-				circleOptions.radius(50);
-				circleOptions.strokeWidth(1);
-				@SuppressWarnings("unused")
-				Circle circle = mMap.addCircle(circleOptions);
-				
-			}
-		}
 	}
 
 	@Override
@@ -190,6 +198,31 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+            int visibleItemCount, int totalItemCount) {
+		
+		this.firstVisibleItem = firstVisibleItem;
+		this.visibleItemCount = visibleItemCount;
+		this.totalItemCount = totalItemCount;
+		
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		
+		if(totalItemCount >= limit * (page + 1) - 1){
+			if( (firstVisibleItem + visibleItemCount - 1) >= (totalItemCount - visibleThreshold) ){
+				if(!flag_loading){
+					flag_loading = true;
+					page++;
+					cargarListaAnunciosCercanos(true);
+				}
+				
+			}
+		}
 	}
 
 }
