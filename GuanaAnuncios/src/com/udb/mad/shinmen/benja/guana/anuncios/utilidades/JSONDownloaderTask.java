@@ -42,8 +42,13 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 	private final String ENCODING = "utf-8";
 	private OnFinishDownload<T> listener;
 	private OnFinishDownloadJSONObject<T> listenerJO;
+	private OnStartDownload onStartDownloadListener;
 	
 	private boolean jsonArray;
+	
+	public interface OnStartDownload{
+		public void onStartDownload();
+	}
 	
 	public interface OnFinishDownload<T> {
 		public void onFinishDownload(T json);
@@ -93,6 +98,21 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 	
 	public void setOnFinishDownloadJSONObject(OnFinishDownloadJSONObject<T> listener) {
 		this.listenerJO = listener;
+	}
+	
+	public OnStartDownload getOnStartDownloadListener() {
+		return onStartDownloadListener;
+	}
+
+	public void setOnStartDownloadListener(OnStartDownload onStartDownloadListener) {
+		this.onStartDownloadListener = onStartDownloadListener;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		if(onStartDownloadListener != null){
+			onStartDownloadListener.onStartDownload();
+		}
 	}
 
 	@Override
