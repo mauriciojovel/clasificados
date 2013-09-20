@@ -67,6 +67,8 @@ public class LoginActivity extends ActionBarActivity implements
 	}
 	
 	private void validar(){
+		findViewById(R.id.btnLogin).setVisibility(View.GONE);
+		findViewById(R.id.btnRegistrar).setVisibility(View.GONE);
 		findViewById(R.id.progressBarLogin).setVisibility(View.VISIBLE);
 		
 		String usuario = edtUsuario.getText().toString();

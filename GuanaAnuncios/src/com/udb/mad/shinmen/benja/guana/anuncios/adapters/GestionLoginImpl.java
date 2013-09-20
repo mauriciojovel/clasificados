@@ -81,6 +81,8 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 			}else{
 				
 				activity.findViewById(R.id.progressBarLogin).setVisibility(View.GONE);
+				activity.findViewById(R.id.btnLogin).setVisibility(View.VISIBLE);
+				activity.findViewById(R.id.btnRegistrar).setVisibility(View.VISIBLE);
 				
 				Toast.makeText(activity, "Usuario/Contraseña invalidos!!..", Toast.LENGTH_SHORT)
 				.show();

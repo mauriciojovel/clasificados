@@ -138,6 +138,12 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 				anuncio.put(CODIGO, jsonObject.getString(ID));
 				anuncio.put(LATITUD, jsonObject.getString(LATITUD));
 				anuncio.put(ALTITUD, jsonObject.getString(ALTITUD));
+				
+				String url = activity.findViewById(R.string.imagenAnuncioService).toString();
+		        url = url.replace("{id}", jsonObject.getString(ID));
+		        
+		        anuncio.put(ALTITUD, jsonObject.getString(ALTITUD));
+		        
 				anunciosList.add(anuncio);
 
 			}

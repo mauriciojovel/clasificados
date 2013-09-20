@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloaderTask;
 
 public class AnunciosCercanosCustomAdapter extends BaseAdapter{
 
@@ -51,6 +53,7 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
         TextView title = (TextView)vi.findViewById(R.id.title);
         TextView description = (TextView)vi.findViewById(R.id.description);
         TextView codigo = (TextView) vi.findViewById(R.id.codigo);
+        ImageView imagen = (ImageView) vi.findViewById(R.id.list_image);
  
         HashMap<String, Object> dato = new HashMap<String, Object>();
         dato = data.get(position);
@@ -59,6 +62,16 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
         title.setText(String.valueOf(dato.get("titulo")));
         description.setText(String.valueOf(dato.get("descripcion")));
         codigo.setText(String.valueOf(dato.get("codigo")));
+        
+        /*Cargando la imagen asincronamente*/
+        //obteniendo la direccion URL para descargar la imagen
+        String url = vi.findViewById(R.string.imagenAnuncioService).toString();
+        url = url.replace("{id}", String.valueOf(dato.get("codigo")));
+        
+        //ejecutando la tarea asincrona
+        if(imagen != null){
+        	new ImageDownloaderTask(imagen).execute(url);
+        }         
         
         return vi;
 	}
