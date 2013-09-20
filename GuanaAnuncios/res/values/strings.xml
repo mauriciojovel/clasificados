@@ -25,5 +25,6 @@
     <string name="lbl_seleccione">Seleccione</string>
     <string name="title_activity_anuncios_cercanos">AnunciosCercanosActivity</string>
     <string name="lblListadoAnuncios">Listado de anuncios</string>
+    <string name="titulo_anuncio">Titulo del anuncio</string>
 
 </resources>
