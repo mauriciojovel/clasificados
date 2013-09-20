@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,10 +30,12 @@ import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Categoria;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 
 public class PublicarAnuncioActivity extends ActionBarActivity implements OnItemSelectedListener{
 
 	String categoriaSeleccionada;
+	ProgressDialog pd;
 	Spinner spCategorias;
 	EditText edtTitulo;
 	EditText edtDescripcion;
@@ -116,6 +119,17 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 				"http://guananuncio.madxdesign.com/index.php/anuncio/save",
 				JSONDownloaderTask.METODO_POST,parametros);
 		jdt.setOnFinishDownloadJSONObject(new PublicarAnuncioListener());
+		jdt.setOnStartDownloadListener(new OnStartDownload() {
+			@Override
+			public void onStartDownload() {
+				pd = new ProgressDialog(activity);
+				pd.setTitle(getResources().getString(R.string.titulo_procesando));
+				pd.setMessage(getResources().getString(R.string.titulo_espere));
+				pd.setCancelable(false);
+				pd.setIndeterminate(true);
+				pd.show();
+			}
+		});
 		
 		try {
 			jdt.execute().get();
@@ -130,10 +144,12 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 			JSONDownloaderTask.OnFinishDownloadJSONObject<JSONObject> {
 		@Override
 		public void onFinishDownloadJSONObject(JSONObject jsonObject) {
+			pd.dismiss();
 			try {
 				String status = jsonObject.getString("estado");
 				if(status.equals("1")){
-					Toast.makeText(activity, "Anuncio Publicado", Toast.LENGTH_SHORT).show();
+					Toast.makeText(activity, "Anuncio Publicado", Toast.LENGTH_LONG).show();
+					finish();
 				}
 			} catch (JSONException e) {
 				Log.e("error", e.getMessage());

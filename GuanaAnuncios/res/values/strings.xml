@@ -26,5 +26,7 @@
     <string name="title_activity_anuncios_cercanos">AnunciosCercanosActivity</string>
     <string name="lblListadoAnuncios">Listado de anuncios cercanos</string>
     <string name="titulo_anuncio">Titulo del anuncio</string>
+    <string name="titulo_procesando">Procesando.</string>
+    <string name="titulo_espere">Por favor espere.</string>
 
 </resources>
