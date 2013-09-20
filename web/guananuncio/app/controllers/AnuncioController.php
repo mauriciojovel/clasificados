@@ -18,10 +18,11 @@ class AnuncioController extends AutheticatedController {
     }
 
     public function postAnuncios($init, $limit) {
-    	$anuncios = Anuncio::orderBy('id', 'desc')
+    	return $this->postAnuncioscercanos($init, $limit);
+    	/*$anuncios = Anuncio::orderBy('id', 'desc')
     	      ->where('es_activo', '=','1')
     	      ->skip($init*$limit)->take($limit)->get();
-    	return Response::json($anuncios);
+    	return Response::json($anuncios);*/
     }
 
     public function getSave() {
@@ -33,9 +34,11 @@ class AnuncioController extends AutheticatedController {
     	$anuncio = new Anuncio();
     	if($anuncio->validate($input)) {
     		$anuncio->fill($input);
-    		$anuncio->fecha_creacion = date('Y-m-d H:i:s');
-    		$anuncio->es_activo = 1;
     		try {
+                $user = Usuario::where('nombre','=',Input::get('usuario'))->firstOrFail();
+                $anuncio->usuario_id = $user->id;
+                $anuncio->fecha_creacion = date('Y-m-d H:i:s');
+                $anuncio->es_activo = 1;
 	    		$anuncio->save();
 	    		return Response::json(array('estado'=>1));
     		} catch(Exception $e) {
@@ -68,7 +71,8 @@ class AnuncioController extends AutheticatedController {
     }
 
     public function postAnunciosbusqueda($start, $limit) {
-        $categoria = Input::get('categoria');
+    	return $this->postAnuncioscercanos($start, $limit);
+        /*$categoria = Input::get('categoria');
         $texto = Input::get('texto');
         $query = Anuncio::where('es_activo','=','1');
         if(isset($categoria) && $categoria != '') {
@@ -81,7 +85,7 @@ class AnuncioController extends AutheticatedController {
             });
         }
         $anuncios = $query->skip($start*$limit)->take($limit)->get();
-        return Response::json($anuncios);
+        return Response::json($anuncios);*/
         //$queries = DB::getQueryLog();
         //$last_query = end($queries);
         //return $last_query;
@@ -92,6 +96,7 @@ class AnuncioController extends AutheticatedController {
         $latitud = Input::get('latitud');
         $categoria = Input::get('categoria');
         $texto = Input::get('texto');
+        $usuario = Input::get('usuario');
         $query = Anuncio::join('usuario','usuario.id','=','anuncio.usuario_id')
             ->where('es_activo','=','1');
 
@@ -105,14 +110,18 @@ class AnuncioController extends AutheticatedController {
                   ->orWhere('descripcion', 'like', '%'.$texto.'%');
             });
         }
-
-        $query->where('usuario.altitud','>=',$altitud-$this->rangeAltitud);
-        $query->where('usuario.altitud','<=',$altitud+$this->rangeAltitud);
-        $query->where('usuario.latitud','>=',$latitud-$this->rangeLatitud);
-        $query->where('usuario.latitud','<=',$latitud+$this->rangeLatitud);
-        $query->select('anuncio.titulo', 'anuncio.descripcion', 'anuncio.fecha_creacion'
-            , 'anuncio.es_activo', 'anuncio.precio'
-            , 'anuncio.telefono', 'usuario.latitud', 'usuario.altitud');
+	if(isset($altitud) && $altitud != '') {
+	        $query->where('usuario.altitud','>=',$altitud-$this->rangeAltitud);
+	        $query->where('usuario.altitud','<=',$altitud+$this->rangeAltitud);
+        }
+       	if(isset($latitud) && $latitud != '') {
+	        $query->where('usuario.latitud','>=',$latitud-$this->rangeLatitud);
+	        $query->where('usuario.latitud','<=',$latitud+$this->rangeLatitud);
+	}
+	if(isset($usuario)&&$usuario!= '') {
+		$query->where('usuario.nombre','<=',$usuario);
+	}
+        $query->select('anuncio.id','anuncio.titulo', 'anuncio.descripcion', 'anuncio.fecha_creacion', 'anuncio.es_activo', 'anuncio.precio', 'anuncio.telefono', 'usuario.latitud', 'usuario.altitud', 'usuario.nombre');
 
         $anuncios = $query->orderBy('anuncio.id','desc')->skip($start*$limit)->take($limit)->get();
         return Response::json($anuncios);

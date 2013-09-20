@@ -55,8 +55,8 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'guananunciosdb',
-			'username'  => 'guananuncio',
+			'database'  => 'mjovel_guananunciodb',
+			'username'  => 'mjovel_anuncio',
 			'password'  => 'anuncio$2013',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',

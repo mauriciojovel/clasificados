@@ -36,10 +36,56 @@
 	<body>
 		<div class="panel panel-info">
 		  <div class="panel-heading">
+		    <h3 class="panel-title">Descargar imagen</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://guananuncio.madxdesign.com/index.php/imagen/download/2" method="POST" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Ver" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Guardar imagen</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://guananuncio.madxdesign.com/index.php/imagen/save" method="POST" class="form-horizontal" enctype="multipart/form-data">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Anuncio</label><div class="col-lg-10"><input class="form-control" name="anuncio_id"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Imagen</label><div class="col-lg-10"><input class="form-control" name="imagen" type="file"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Guardar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
 		    <h3 class="panel-title">Busqueda Anuncio Cercanos</h3>
 		  </div>
 		  <div class="panel-body">
-		    <form action="http://localhost/guananuncio/index.php/anuncio/anuncioscercanos/0/25" method="POST" class="form-horizontal">
+		    <form action="http://guananuncio.madxdesign.com/index.php/anuncio/anuncioscercanos/0/25" method="POST" class="form-horizontal">
 		    	<div class="form-group">
 					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria"/></div>
 				</div>
@@ -60,7 +106,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-lg-offset-2 col-lg-10">
-						<input type="submit" value="Guardar" class="btn btn-primary"/>
+						<input type="submit" value="Buscar" class="btn btn-primary"/>
 					</div>
 				</div>
 			</form>
@@ -71,12 +117,47 @@
 		    <h3 class="panel-title">Busqueda Anuncio</h3>
 		  </div>
 		  <div class="panel-body">
-		    <form action="http://localhost/guananuncio/index.php/anuncio/anunciosbusqueda/0/25" method="POST" class="form-horizontal">
+		    <form action="http://guananuncio.madxdesign.com/index.php/anuncio/anunciosbusqueda/0/25" method="POST" class="form-horizontal">
 		    	<div class="form-group">
 					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria"/></div>
 				</div>
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Texto</label><div class="col-lg-10"><input class="form-control" name="texto"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Buscar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Guardar Anuncio</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://guananuncio.madxdesign.com/index.php/anuncio/save" method="POST" class="form-horizontal">
+		    	<div class="form-group">
+					<label class="col-lg-2 control-label">Categoria</label><div class="col-lg-10"><input class="form-control" name="categoria_id"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Titulo</label><div class="col-lg-10"><input class="form-control" name="titulo"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Descripcion</label><div class="col-lg-10"><input class="form-control" name="descripcion"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Precio</label><div class="col-lg-10"><input class="form-control" name="precio"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Telefono</label><div class="col-lg-10"><input class="form-control" name="telefono"/></div>
 				</div>
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
@@ -94,10 +175,30 @@
 		</div>
 		<div class="panel panel-info">
 		  <div class="panel-heading">
+		    <h3 class="panel-title">Cargar categorias</h3>
+		  </div>
+		  <div class="panel-body">
+		    <form action="http://guananuncio.madxdesign.com/index.php/anuncio/categorias" method="POST" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Usuario</label><div class="col-lg-10"><input class="form-control" name="usuario" value="test"/></div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Token</label><div class="col-lg-10"><input class="form-control" name="token" value="e10adc3949ba59abbe56e057f20f883e"/></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input type="submit" value="Buscar" class="btn btn-primary"/>
+					</div>
+				</div>
+			</form>
+		  </div>
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
 		    <h3 class="panel-title">Datos</h3>
 		  </div>
 		  <div class="panel-body">
-		    <form action="http://localhost/guananuncio/index.php/usuario/save" method="POST" class="form-horizontal">
+		    <form action="http://guananuncio.madxdesign.com/index.php/usuario/save" method="POST" class="form-horizontal">
 		    	<div class="form-group">
 					<label class="col-lg-2 control-label">Nombre</label><div class="col-lg-10"><input class="form-control" name="nombre"/></div>
 				</div>
