@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_refrescar"
         android:title="@string/title_activity_publicar_anuncio"
-        app:showAsAction="ifRoom" 
+        app:showAsAction="always" 
         android:icon="@drawable/ic_action_refresh"/>
 
     <item
@@ -12,5 +12,12 @@
         android:title="@string/title_activity_publicar_anuncio"
         app:showAsAction="ifRoom" 
         android:icon="@drawable/ic_nuevo_anuncio"/>
+    
+    <item 
+        android:id="@+id/action_buscar"
+        android:title="@string/title_activity_publicar_anuncio"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@drawable/ic_search" />
 
 </menu>

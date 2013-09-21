@@ -1,0 +1,5 @@
+<searchable 
+      xmlns:android="http://schemas.android.com/apk/res/android" 
+   android:label="@string/buscar_anuncios"
+   android:hint="@string/buscar_anuncios">
+</searchable> 

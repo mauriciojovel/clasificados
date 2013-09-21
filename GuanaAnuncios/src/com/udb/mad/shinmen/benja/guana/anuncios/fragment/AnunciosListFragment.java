@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -36,6 +38,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	SharedPreferences prefs;
 	String token;
 	String usuario;
+	String query;
 	String PAGE_MARK = "{page}";
 	String LIMIT_MARK = "{limit}";
 	int page = 0;
@@ -68,7 +71,26 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		getListView().setOnScrollListener(scrollListener);
 		
 		setListShownNoAnimation(false);
+		
+		handleIntent(getActivity().getIntent()); 
 
+	}
+
+	private void handleIntent(Intent intent){
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+			query = intent.getExtras().getString(SearchManager.QUERY);
+			buscar();
+		}else{
+			cargarAnuncios(page);
+		}
+	}
+	
+	private void buscar() {
+		setListShownNoAnimation(false);
+		page = 0;
+		adapter.clear();
+		scrollListener.setCurrentPage(page);
+		scrollListener.setPreviousTotal(0);
 		cargarAnuncios(page);
 	}
 
@@ -76,9 +98,10 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		
 		this.page = page;
 
-		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(3);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
+		parametros.add(new BasicNameValuePair("texto", query));
 
 		String url = "http://guananuncio.madxdesign.com/index.php/anuncio/anunciosbusqueda/{page}/{limit}";
 
@@ -95,11 +118,12 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 
 	public void refrescarLista(){
 		setListShownNoAnimation(false);
+		query = null;
 		page = 0;
 		adapter.clear();
 		scrollListener.setCurrentPage(page);
 		scrollListener.setPreviousTotal(0);
-		cargarAnuncios(0);
+		cargarAnuncios(page);
 	}
 	
 	private class BusquedaAnunciosListener implements
