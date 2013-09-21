@@ -27,17 +27,14 @@
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity"
             android:label="@string/title_activity_login" >   
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity"
             android:label="@string/title_activity_anuncio" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.RegistroActivity"

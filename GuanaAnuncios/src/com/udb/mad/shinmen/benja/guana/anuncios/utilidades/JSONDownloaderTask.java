@@ -52,10 +52,12 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 	
 	public interface OnFinishDownload<T> {
 		public void onFinishDownload(T json);
+		public void loadError();
 	}
 	
 	public interface OnFinishDownloadJSONObject<T> {
 		public void onFinishDownloadJSONObject(T json);
+		public void loadError();
 	}
 	
 	public JSONDownloaderTask(String url, String metodo,
@@ -119,9 +121,17 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 	protected void onPostExecute(T result) {
 		//super.onPostExecute(result);
 		if(listener != null) {
-			listener.onFinishDownload(result);
+			if(result != null) {
+				listener.onFinishDownload(result);
+			} else {
+				listener.loadError();
+			}
 		}else if(listenerJO != null) {
-			listenerJO.onFinishDownloadJSONObject(result);
+			if(result != null) {
+				listenerJO.onFinishDownloadJSONObject(result);
+			} else {
+				listenerJO.loadError();
+			}
 		}
 	}
 	
@@ -170,14 +180,28 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 				StringBuilder sb = new StringBuilder();
 				String line = null;
 				while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
+					sb.append(line)
+					  .append("\n");
 				}
 				inputStream.close();
 				json = sb.toString();
 				if(isJsonArray()) {
-					jsonData = (T) new JSONArray(json);
+					// Verificamos la conversion
+					if(json.startsWith("[")) {
+						jsonData = (T) new JSONArray(json);
+					} else {
+						Log.e("JSON Downloader", "Se esperaba un array "
+								+ "json pero se obtuvo un valor diferente: " 
+								+ json);
+					}
 				} else {
-					jsonData = (T) new JSONObject(json);
+					if(json.startsWith("{")) {
+						jsonData = (T) new JSONObject(json);
+					} else {
+						Log.e("JSON Downloader", "Se esperaba un array "
+								+ "json pero se obtuvo un valor diferente: " 
+								+ json);
+					}
 				}
 			} else {
 				Log.e(RegistroActivity.class.toString(),

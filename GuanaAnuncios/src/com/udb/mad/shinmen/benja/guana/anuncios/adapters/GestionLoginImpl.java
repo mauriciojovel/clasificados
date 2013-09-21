@@ -8,15 +8,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Toast;
 
-import com.udb.mad.shinmen.benja.guana.anuncios.AnunciosCercanosActivity;
+import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFinishDownload<JSONObject> {
 
@@ -27,15 +27,15 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 	public static final String CLAVE = "clave";
 	
 	private JSONDownloaderTask<JSONObject> jsonTask;
-	private SharedPreferences prefs;
+	//private SharedPreferences prefs;
 	private LoginActivity activity;
 	private String usuario;
 	
 	
 	@Override
-	public void loginUsuario(String usuario, String password, String url, SharedPreferences prefs, LoginActivity activity) {
+	public void loginUsuario(String usuario, String password, String url, /*SharedPreferences prefs,*/ LoginActivity activity) {
 
-		this.prefs = prefs;
+		//this.prefs = prefs;
 		this.activity = activity;
 		this.usuario = usuario;
 		
@@ -66,13 +66,15 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 				 * sino lo envie directamente a la lista de anuncios
 				 * 
 				 * */
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putString(TOKEN, token);
-				editor.putString(USUARIO, usuario);
-				editor.commit();
+//				SharedPreferences.Editor editor = prefs.edit();
+//				editor.putString(TOKEN, token);
+//				editor.putString(USUARIO, usuario);
+//				editor.commit();
+				PreferenciasUsuario.setToken(token, activity);
+				PreferenciasUsuario.setUsuario(usuario, activity);
 				
 				/*Si el logeo es exitoso se inicia la siguiente actividad*/
-				Intent intento = new Intent(activity, AnunciosCercanosActivity.class);
+				Intent intento = new Intent(activity, AnuncioActivity.class);
 				activity.startActivity(intento);
 				
 				/*se termina la actividad anterior*/
@@ -100,6 +102,13 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 			// TODO Auto-generated catch block
 			e.printStackTrace();			
 		} 
+	}
+
+
+	@Override
+	public void loadError() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

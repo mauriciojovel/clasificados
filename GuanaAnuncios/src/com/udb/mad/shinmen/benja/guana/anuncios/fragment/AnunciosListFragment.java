@@ -10,17 +10,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 
+import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnuncioCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener;
 import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener.onScrollEndListener;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class AnunciosListFragment extends ListFragment implements Serializable {
 
@@ -33,7 +34,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	List<Anuncio> anuncios;
 	AnuncioCustomAdapter adapter;
 	Activity activity;
-	SharedPreferences prefs;
+	//SharedPreferences prefs;
 	String token;
 	String usuario;
 	String PAGE_MARK = "{page}";
@@ -45,31 +46,38 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		anuncios = new ArrayList<Anuncio>();
-		
-		prefs = getActivity().getSharedPreferences("GuanaAnunciosPreferences",
-				Context.MODE_PRIVATE);
-		token = /* prefs.getString(GestionLoginImpl.TOKEN,null) */"e10adc3949ba59abbe56e057f20f883e";
-		usuario = /* prefs.getString(GestionLoginImpl.USUARIO, null) */"test";
-
-		if(adapter == null){
-			adapter = new AnuncioCustomAdapter(getActivity());
-		}
-		
-		setListAdapter(adapter);
-		
-		scrollListener = new EndlessScrollListener(new onScrollEndListener() {
-			@Override
-			public void onEnd(int page) {
-				cargarAnuncios(page);
+		if (PreferenciasUsuario.isUsuarioAutenticado(getActivity())) {
+			anuncios = new ArrayList<Anuncio>();
+//			prefs = getActivity().getSharedPreferences(
+//					"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
+			token = PreferenciasUsuario.getToken(getActivity());
+			usuario = PreferenciasUsuario.getUsuario(getActivity());
+			
+			if (adapter == null) {
+				adapter = new AnuncioCustomAdapter(getActivity());
 			}
-		});
-		
-		getListView().setOnScrollListener(scrollListener);
-		
-		setListShownNoAnimation(false);
+			setListAdapter(adapter);
+			scrollListener = new EndlessScrollListener(
+					new onScrollEndListener() {
+						@Override
+						public void onEnd(int page) {
+							cargarAnuncios(page);
+						}
+					});
+			getListView().setOnScrollListener(scrollListener);
+			setListShownNoAnimation(false);
+			cargarAnuncios(page);
+		} else {
+			// Se tiene que levantar la actividad de login y finalizar esta
+			// actividad.
+			showLogin();
+		}
+	}
 
-		cargarAnuncios(page);
+	private void showLogin() {
+		Intent i = new Intent(getActivity(),LoginActivity.class);
+		startActivity(i);
+		getActivity().finish();
 	}
 
 	private void cargarAnuncios(int page) {
@@ -126,6 +134,12 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 			
 			adapter.notifyDataSetChanged();
 			AnunciosListFragment.this.setListShownNoAnimation(true);
+		}
+
+		@Override
+		public void loadError() {
+			// supondremos que el error es porque no te has autenticado.
+			showLogin();
 		}
 	}
 }

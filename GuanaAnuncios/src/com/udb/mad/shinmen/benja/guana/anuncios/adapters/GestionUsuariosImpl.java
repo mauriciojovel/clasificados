@@ -219,4 +219,10 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 					Toast.LENGTH_SHORT).show();
 		}
 	}
+
+	@Override
+	public void loadError() {
+		// TODO Auto-generated method stub
+		
+	}
 }

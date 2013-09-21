@@ -155,6 +155,12 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 				Log.e("error", e.getMessage());
 			}
 		}
+
+		@Override
+		public void loadError() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	private class CategoriaDownloadListener implements
@@ -185,6 +191,12 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 			SpinnerAdapter adapter = new ArrayAdapter<Categoria>(activity,
 					android.R.layout.simple_spinner_dropdown_item, categorias);
 			spCategorias.setAdapter(adapter);
+		}
+
+		@Override
+		public void loadError() {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 

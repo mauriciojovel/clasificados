@@ -198,4 +198,10 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 		activity.flag_loading = false;
 	}
 
+	@Override
+	public void loadError() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -1,8 +1,6 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
@@ -89,10 +87,8 @@ public class LoginActivity extends ActionBarActivity implements
 		GestionLoginImpl gl = new GestionLoginImpl();
 		
 		String url = getResources().getString(R.string.loginService);
-		SharedPreferences prefs = getSharedPreferences(
-				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
 		
-		gl.loginUsuario(usuario, pass, url, prefs, this);		
+		gl.loginUsuario(usuario, pass, url, this);		
 	}
 	
 	@Override
