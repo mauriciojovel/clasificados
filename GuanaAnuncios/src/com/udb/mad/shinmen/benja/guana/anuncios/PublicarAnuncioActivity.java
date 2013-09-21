@@ -199,14 +199,22 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 
 	private boolean subirImagenes(String idAnuncio) {
 		
-		/*
-		 * Bitmap bm = BitmapFactory.decodeFile(imagePath, null);
-		 * ByteArrayOutputStream stream = new
-		 * ByteArrayOutputStream();
-		 * bm.compress(Bitmap.CompressFormat.PNG, 90, stream); byte
-		 * [] byte_arr = stream.toByteArray(); String image_str =
-		 * Base64.encodeToString(byte_arr, Base64.DEFAULT);
-		 */
+		Bitmap bm = BitmapFactory.decodeFile(adapter.getItem(0), null);
+		ByteArrayOutputStream stream = new
+		ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.PNG, 90, stream); byte
+		[] byte_arr = stream.toByteArray(); 
+		String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+		
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(8);
+		parametros.add(new BasicNameValuePair("usuario", usuario));
+		parametros.add(new BasicNameValuePair("token", token));
+		parametros.add(new BasicNameValuePair("imagen",image_str));
+
+		JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
+				"http://guananuncio.madxdesign.com/index.php/imagen/save",
+				JSONDownloaderTask.METODO_POST, parametros);
+		jdt.setOnFinishDownloadJSONObject(new SubirImagenListener());
 		
 		return false;
 	}
