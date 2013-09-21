@@ -12,8 +12,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -31,6 +29,7 @@ import android.widget.Toast;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Categoria;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class PublicarAnuncioActivity extends ActionBarActivity implements OnItemSelectedListener{
 
@@ -44,7 +43,6 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 	EditText edtTelefono;
 	List<Categoria> categorias;
 	Activity activity;
-	SharedPreferences prefs;
 	String token;
 	String usuario;
 
@@ -64,10 +62,8 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 
 		this.activity = this;
 		
-		prefs = getSharedPreferences(
-				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
-		token = /*prefs.getString(GestionLoginImpl.TOKEN,null)*/ "e10adc3949ba59abbe56e057f20f883e";
-		usuario = /*prefs.getString(GestionLoginImpl.USUARIO, null)*/ "test";
+		token = PreferenciasUsuario.getToken(this);
+		usuario = PreferenciasUsuario.getUsuario(this);
 
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
 		parametros.add(new BasicNameValuePair("usuario",usuario));
