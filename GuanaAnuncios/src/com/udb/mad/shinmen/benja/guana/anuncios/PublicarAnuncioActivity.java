@@ -12,7 +12,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,10 +26,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.udb.mad.shinmen.benja.guana.anuncios.adapters.ImagenAnuncioCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Categoria;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
@@ -33,7 +39,10 @@ import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class PublicarAnuncioActivity extends ActionBarActivity implements OnItemSelectedListener{
 
+	 private int RESULT_LOAD_IMAGE = 69;
+	
 	String categoriaSeleccionada;
+	ImagenAnuncioCustomAdapter adapter;
 	ProgressDialog pd;
 	Spinner spCategorias;
 	EditText edtTitulo;
@@ -41,6 +50,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 	EditText edtPrecio;
 	EditText edtCorreo;
 	EditText edtTelefono;
+	ListView lvImagenes;
 	List<Categoria> categorias;
 	Activity activity;
 	String token;
@@ -57,6 +67,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		edtPrecio = (EditText) findViewById(R.id.edtPrecio);
 		edtCorreo = (EditText) findViewById(R.id.edtCorreo);
 		edtTelefono = (EditText) findViewById(R.id.edtTelefono);
+		lvImagenes = (ListView) findViewById(R.id.lvImagenesPublicar);
 		
 		spCategorias.setOnItemSelectedListener(this);
 
@@ -64,7 +75,13 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		
 		token = PreferenciasUsuario.getToken(this);
 		usuario = PreferenciasUsuario.getUsuario(this);
+		
+		if (adapter == null) {
+			adapter = new ImagenAnuncioCustomAdapter(this);
+		}
 
+		lvImagenes.setAdapter(adapter);
+		
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
 		parametros.add(new BasicNameValuePair("usuario",usuario));
 		parametros.add(new BasicNameValuePair("token",token));
@@ -96,10 +113,44 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		case R.id.action_publicar_anuncio:
 			guardarAnuncio();
 			return true;
+		case R.id.action_adjuntar_imagen:
+			adjuntarImagen();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
+	private void adjuntarImagen() {
+		Intent i = new Intent(Intent.ACTION_PICK
+                ,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+	}
+	
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode
+            , Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         
+        if (requestCode == RESULT_LOAD_IMAGE
+                && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+    
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+    
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            try {
+                adapter.add(picturePath);
+                adapter.notifyDataSetChanged();
+            } catch(Exception ex) {
+                Log.e("Error", "Ocurrio un error grave" ,ex);
+            }
+        }
+    }
 
 	private void guardarAnuncio() {
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(8);

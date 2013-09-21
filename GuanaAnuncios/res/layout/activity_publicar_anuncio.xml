@@ -58,4 +58,10 @@
         android:hint="@string/telefono_contacto"
         android:inputType="phone" />
 
+    <ListView
+        android:id="@+id/lvImagenesPublicar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
 </LinearLayout>
