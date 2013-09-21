@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -34,7 +35,6 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	List<Anuncio> anuncios;
 	AnuncioCustomAdapter adapter;
 	Activity activity;
-	//SharedPreferences prefs;
 	String token;
 	String usuario;
 	String query;
@@ -49,8 +49,6 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		
 		if (PreferenciasUsuario.isUsuarioAutenticado(getActivity())) {
 			anuncios = new ArrayList<Anuncio>();
-//			prefs = getActivity().getSharedPreferences(
-//					"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
 			token = PreferenciasUsuario.getToken(getActivity());
 			usuario = PreferenciasUsuario.getUsuario(getActivity());
 			
@@ -67,12 +65,30 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 					});
 			getListView().setOnScrollListener(scrollListener);
 			setListShownNoAnimation(false);
-			cargarAnuncios(page);
+			handleIntent(getActivity().getIntent());
 		} else {
 			// Se tiene que levantar la actividad de login y finalizar esta
 			// actividad.
 			showLogin();
 		}
+	}
+	
+	private void handleIntent(Intent intent){
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+			query = intent.getExtras().getString(SearchManager.QUERY);
+			buscar();
+		}else{
+			cargarAnuncios(page);
+		}
+	}
+	
+	private void buscar() {
+		setListShownNoAnimation(false);
+		page = 0;
+		adapter.clear();
+		scrollListener.setCurrentPage(page);
+		scrollListener.setPreviousTotal(0);
+		cargarAnuncios(page);
 	}
 
 	private void showLogin() {
@@ -85,7 +101,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		
 		this.page = page;
 
-		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(3);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
 		parametros.add(new BasicNameValuePair("texto", query));
