@@ -65,7 +65,8 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
         
         /*Cargando la imagen asincronamente*/
         //obteniendo la direccion URL para descargar la imagen
-        String url = vi.findViewById(R.string.imagenAnuncioService).toString();
+        String url = vi.getResources().getString(R.string.imagenAnuncioService);
+        //vi.findViewById(R.string.imagenAnuncioService).toString();
         url = url.replace("{id}", String.valueOf(dato.get("codigo")));
         
         //ejecutando la tarea asincrona

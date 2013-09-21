@@ -43,9 +43,20 @@ public class AnuncioActivity extends ActionBarActivity {
 			AnunciosListFragment alf = (AnunciosListFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.listAnuncios);
 			alf.refrescarLista();
+			return true;
+		case R.id.action_location:
+			openAnuncioCercaDeMi();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void openAnuncioCercaDeMi() {
+		Intent i = new Intent();
+		i.setClass(this, AnunciosCercanosActivity.class);
+		startActivity(i);
+		
 	}
 
 	private void openPublicarAnuncioActivity() {
