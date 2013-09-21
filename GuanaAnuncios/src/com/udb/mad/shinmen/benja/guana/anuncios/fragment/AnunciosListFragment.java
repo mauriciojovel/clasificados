@@ -37,6 +37,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	//SharedPreferences prefs;
 	String token;
 	String usuario;
+	String query;
 	String PAGE_MARK = "{page}";
 	String LIMIT_MARK = "{limit}";
 	int page = 0;
@@ -87,6 +88,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
+		parametros.add(new BasicNameValuePair("texto", query));
 
 		String url = "http://guananuncio.madxdesign.com/index.php/anuncio/anunciosbusqueda/{page}/{limit}";
 
@@ -103,11 +105,12 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 
 	public void refrescarLista(){
 		setListShownNoAnimation(false);
+		query = null;
 		page = 0;
 		adapter.clear();
 		scrollListener.setCurrentPage(page);
 		scrollListener.setPreviousTotal(0);
-		cargarAnuncios(0);
+		cargarAnuncios(page);
 	}
 	
 	private class BusquedaAnunciosListener implements
