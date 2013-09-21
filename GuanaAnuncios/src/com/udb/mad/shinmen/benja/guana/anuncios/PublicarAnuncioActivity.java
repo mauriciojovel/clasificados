@@ -1,5 +1,6 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -14,10 +15,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,10 +41,11 @@ import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
-public class PublicarAnuncioActivity extends ActionBarActivity implements OnItemSelectedListener{
+public class PublicarAnuncioActivity extends ActionBarActivity implements
+		OnItemSelectedListener {
 
-	 private int RESULT_LOAD_IMAGE = 69;
-	
+	private int RESULT_LOAD_IMAGE = 69;
+
 	String categoriaSeleccionada;
 	ImagenAnuncioCustomAdapter adapter;
 	ProgressDialog pd;
@@ -68,28 +73,28 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		edtCorreo = (EditText) findViewById(R.id.edtCorreo);
 		edtTelefono = (EditText) findViewById(R.id.edtTelefono);
 		lvImagenes = (ListView) findViewById(R.id.lvImagenesPublicar);
-		
+
 		spCategorias.setOnItemSelectedListener(this);
 
 		this.activity = this;
-		
+
 		token = PreferenciasUsuario.getToken(this);
 		usuario = PreferenciasUsuario.getUsuario(this);
-		
+
 		if (adapter == null) {
 			adapter = new ImagenAnuncioCustomAdapter(this);
 		}
 
 		lvImagenes.setAdapter(adapter);
-		
+
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
-		parametros.add(new BasicNameValuePair("usuario",usuario));
-		parametros.add(new BasicNameValuePair("token",token));
+		parametros.add(new BasicNameValuePair("usuario", usuario));
+		parametros.add(new BasicNameValuePair("token", token));
 		JSONDownloaderTask<JSONArray> jdt = new JSONDownloaderTask<JSONArray>(
-				 "http://guananuncio.madxdesign.com/index.php/anuncio/categorias" ,
+				"http://guananuncio.madxdesign.com/index.php/anuncio/categorias",
 				JSONDownloaderTask.METODO_POST, parametros, true);
 		jdt.setOnFinishDownload(new CategoriaDownloadListener());
-		
+
 		try {
 			jdt.execute().get();
 		} catch (InterruptedException e) {
@@ -121,63 +126,68 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 	}
 
 	private void adjuntarImagen() {
-		Intent i = new Intent(Intent.ACTION_PICK
-                ,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+		Intent i = new Intent(Intent.ACTION_PICK,
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		startActivityForResult(i, RESULT_LOAD_IMAGE);
 	}
-	
+
 	@Override
-    protected void onActivityResult(int requestCode, int resultCode
-            , Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-         
-        if (requestCode == RESULT_LOAD_IMAGE
-                && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-    
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-    
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            try {
-                adapter.add(picturePath);
-                adapter.notifyDataSetChanged();
-            } catch(Exception ex) {
-                Log.e("Error", "Ocurrio un error grave" ,ex);
-            }
-        }
-    }
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+				&& null != data) {
+			Uri selectedImage = data.getData();
+			String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+			Cursor cursor = getContentResolver().query(selectedImage,
+					filePathColumn, null, null, null);
+			cursor.moveToFirst();
+
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			String picturePath = cursor.getString(columnIndex);
+			cursor.close();
+			try {
+				adapter.add(picturePath);
+				adapter.notifyDataSetChanged();
+			} catch (Exception ex) {
+				Log.e("Error", "Ocurrio un error grave", ex);
+			}
+		}
+	}
 
 	private void guardarAnuncio() {
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(8);
-		parametros.add(new BasicNameValuePair("usuario",usuario));
-		parametros.add(new BasicNameValuePair("token",token));
-		parametros.add(new BasicNameValuePair("titulo", this.edtTitulo.getText().toString()));
-		parametros.add(new BasicNameValuePair("descripcion",this.edtDescripcion.getText().toString()));
-		parametros.add(new BasicNameValuePair("categoria_id",categoriaSeleccionada));
-		parametros.add(new BasicNameValuePair("precio",this.edtPrecio.getText().toString()));
-		parametros.add(new BasicNameValuePair("telefono",this.edtTelefono.getText().toString()));
+		parametros.add(new BasicNameValuePair("usuario", usuario));
+		parametros.add(new BasicNameValuePair("token", token));
+		parametros.add(new BasicNameValuePair("titulo", this.edtTitulo
+				.getText().toString()));
+		parametros.add(new BasicNameValuePair("descripcion",
+				this.edtDescripcion.getText().toString()));
+		parametros.add(new BasicNameValuePair("categoria_id",
+				categoriaSeleccionada));
+		parametros.add(new BasicNameValuePair("precio", this.edtPrecio
+				.getText().toString()));
+		parametros.add(new BasicNameValuePair("telefono", this.edtTelefono
+				.getText().toString()));
 
 		JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
 				"http://guananuncio.madxdesign.com/index.php/anuncio/save",
-				JSONDownloaderTask.METODO_POST,parametros);
+				JSONDownloaderTask.METODO_POST, parametros);
 		jdt.setOnFinishDownloadJSONObject(new PublicarAnuncioListener());
 		jdt.setOnStartDownloadListener(new OnStartDownload() {
 			@Override
 			public void onStartDownload() {
 				pd = new ProgressDialog(activity);
-				pd.setTitle(getResources().getString(R.string.titulo_procesando));
+				pd.setTitle(getResources()
+						.getString(R.string.titulo_procesando));
 				pd.setMessage(getResources().getString(R.string.titulo_espere));
 				pd.setCancelable(false);
 				pd.setIndeterminate(true);
 				pd.show();
 			}
 		});
-		
+
 		try {
 			jdt.execute().get();
 		} catch (InterruptedException e) {
@@ -187,15 +197,30 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		}
 	}
 
-	private class PublicarAnuncioListener implements
+	private boolean subirImagenes(String idAnuncio) {
+		
+		/*
+		 * Bitmap bm = BitmapFactory.decodeFile(imagePath, null);
+		 * ByteArrayOutputStream stream = new
+		 * ByteArrayOutputStream();
+		 * bm.compress(Bitmap.CompressFormat.PNG, 90, stream); byte
+		 * [] byte_arr = stream.toByteArray(); String image_str =
+		 * Base64.encodeToString(byte_arr, Base64.DEFAULT);
+		 */
+		
+		return false;
+	}
+
+	private class SubirImagenListener implements
 			JSONDownloaderTask.OnFinishDownloadJSONObject<JSONObject> {
 		@Override
 		public void onFinishDownloadJSONObject(JSONObject jsonObject) {
 			pd.dismiss();
 			try {
 				String status = jsonObject.getString("estado");
-				if(status.equals("1")){
-					Toast.makeText(activity, "Anuncio Publicado", Toast.LENGTH_LONG).show();
+				if (status.equals("1")) {
+					Toast.makeText(activity, "Anuncio Publicado",
+							Toast.LENGTH_LONG).show();
 					finish();
 				}
 			} catch (JSONException e) {
@@ -206,7 +231,29 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		@Override
 		public void loadError() {
 			// TODO Auto-generated method stub
-			
+
+		}
+	}
+
+	private class PublicarAnuncioListener implements
+			JSONDownloaderTask.OnFinishDownloadJSONObject<JSONObject> {
+		@Override
+		public void onFinishDownloadJSONObject(JSONObject jsonObject) {
+			try {
+				String status = jsonObject.getString("estado");
+				if (status.equals("1")) {
+					String id = jsonObject.getString("estado");
+					subirImagenes(id);
+				}
+			} catch (JSONException e) {
+				Log.e("error", e.getMessage());
+			}
+		}
+
+		@Override
+		public void loadError() {
+			// TODO Auto-generated method stub
+
 		}
 	}
 
@@ -243,19 +290,19 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements OnItem
 		@Override
 		public void loadError() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, 
-            int pos, long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int pos,
+			long id) {
 		Categoria c = categorias.get(pos);
 		categoriaSeleccionada = c.getCodigoCategoria();
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		
+
 	}
 }
