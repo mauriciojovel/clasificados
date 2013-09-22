@@ -228,8 +228,13 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				String status = jsonObject.getString("estado");
 				if (status.equals("1")) {
 					Toast.makeText(activity, "Anuncio Publicado",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 					finish();
+				}else{
+					if(status.equals("-1")){
+						Toast.makeText(activity, "Ocurrio un error inesperado. Vuelva a intentar.",
+								Toast.LENGTH_SHORT).show();
+					}
 				}
 			} catch (JSONException e) {
 				Log.e("error", e.getMessage());
@@ -252,6 +257,12 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				if (status.equals("1")) {
 					String id = jsonObject.getString("estado");
 					subirImagenes(id);
+				}else{
+					if(status.equals("-1")){
+						pd.dismiss();
+						Toast.makeText(activity, "Ocurrio un error inesperado. Vuelva a intentar.",
+								Toast.LENGTH_SHORT).show();
+					}
 				}
 			} catch (JSONException e) {
 				Log.e("error", e.getMessage());
