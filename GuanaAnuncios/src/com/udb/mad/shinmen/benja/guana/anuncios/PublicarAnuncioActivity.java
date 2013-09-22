@@ -63,6 +63,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_publicar_anuncio);
 
@@ -94,14 +95,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				"http://guananuncio.madxdesign.com/index.php/anuncio/categorias",
 				JSONDownloaderTask.METODO_POST, parametros, true);
 		jdt.setOnFinishDownload(new CategoriaDownloadListener());
-
-		try {
-			jdt.execute().get();
-		} catch (InterruptedException e) {
-			Log.e("error", e.getMessage());
-		} catch (ExecutionException e) {
-			Log.e("error", e.getMessage());
-		}
+		jdt.execute();
 	}
 
 	@Override
@@ -187,34 +181,28 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				pd.show();
 			}
 		});
-
-		try {
-			jdt.execute().get();
-		} catch (InterruptedException e) {
-			Log.e("error", e.getMessage());
-		} catch (ExecutionException e) {
-			Log.e("error", e.getMessage());
-		}
+		jdt.execute();
 	}
 
 	private boolean subirImagenes(String idAnuncio) {
 		
 		Bitmap bm = BitmapFactory.decodeFile(adapter.getItem(0), null);
-		ByteArrayOutputStream stream = new
-		ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.PNG, 90, stream); byte
-		[] byte_arr = stream.toByteArray(); 
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.PNG, 90, stream); 
+		byte[] byte_arr = stream.toByteArray(); 
 		String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 		
-		List<NameValuePair> parametros = new ArrayList<NameValuePair>(8);
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(4);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
 		parametros.add(new BasicNameValuePair("imagen",image_str));
+		parametros.add(new BasicNameValuePair("anuncio_id",idAnuncio));
 
 		JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
 				"http://guananuncio.madxdesign.com/index.php/imagen/save",
 				JSONDownloaderTask.METODO_POST, parametros);
 		jdt.setOnFinishDownloadJSONObject(new SubirImagenListener());
+		jdt.execute();
 		
 		return false;
 	}
@@ -255,7 +243,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 			try {
 				String status = jsonObject.getString("estado");
 				if (status.equals("1")) {
-					String id = jsonObject.getString("estado");
+					String id = jsonObject.getString("id");
 					subirImagenes(id);
 				}else{
 					if(status.equals("-1")){
