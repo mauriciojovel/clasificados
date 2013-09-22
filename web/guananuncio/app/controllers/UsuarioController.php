@@ -22,7 +22,7 @@ class UsuarioController extends AutheticatedController {
 	    		$user = Usuario::where('nombre','=',$usuario)->orWhere('correo_electronico','=',$usuario)->firstOrFail();
 	    		
     			if($user->clave == $clave) {
-                    $user->save();
+                    //$user->save();
                     $newToken = $this->token();
                     try {
                         $token = Token::where('usuario_id', '=', $user->id)
@@ -31,6 +31,7 @@ class UsuarioController extends AutheticatedController {
                         $token = new Token(Input::all());
                         $token->usuario_id = $user->id;
                     }
+                    $token->token = $newToken;
                     $token->save();
     				return Response::json(array('estado'=>'1','errors'=>array(),'token'=>$newToken));
     			} else {
@@ -58,6 +59,7 @@ class UsuarioController extends AutheticatedController {
 	    		$usuario->save();
                 $token = new Token(Input::all());
                 $token->usuario_id = $usuario->id;
+                $token->token = $newToken;
                 $token->save();
 	    		return Response::json(array('estado'=>'1', 'errors'=>array(),'token'=>$newToken));
 	    	} catch(Exception $e) {

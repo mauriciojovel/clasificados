@@ -53,7 +53,7 @@ Route::filter('auth.token', function()
 				 ->where('usuario.nombre','=',$name)
 		         ->where('token.token','=',$token)->firstOrFail();
 	}catch(Exception $e) {
-		return Response::json(array('estado'=>-2,'errors'=>array('mensaje'=>'Usuario no autenticado')));
+		return Response::json(array('estado'=>-2,'errors'=>array('mensaje'=>'Usuario no autenticado'.$e->getMessages())));
 	}
 });
 

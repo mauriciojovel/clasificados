@@ -198,8 +198,8 @@ public class JSONDownloaderTask<T> extends AsyncTask<String, String, T> {
 					if(json.startsWith("{")) {
 						jsonData = (T) new JSONObject(json);
 					} else {
-						Log.e("JSON Downloader", "Se esperaba un array "
-								+ "json pero se obtuvo un valor diferente: " 
+						Log.e("JSON Downloader", "Se esperaba un object "
+								+ "json pero sem obtuvo un valor diferente: " 
 								+ json);
 					}
 				}
