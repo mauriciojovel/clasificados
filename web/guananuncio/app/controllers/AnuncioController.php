@@ -39,7 +39,12 @@ class AnuncioController extends AutheticatedController {
                 $anuncio->usuario_id = $user->id;
                 $anuncio->fecha_creacion = date('Y-m-d H:i:s');
                 $anuncio->es_activo = 1;
+
                 //$anuncio->anuncio=base64_decode($anuncio->imagen);
+                $value = mb_check_encoding($anuncio->titulo, 'UTF-8') ? $anuncio->titulo : utf8_encode($anuncio->titulo);
+                $anuncio->titulo = $value;
+                $value = mb_check_encoding($anuncio->descripcion, 'UTF-8') ? $anuncio->descripcion : utf8_encode($anuncio->descripcion);
+                $anuncio->descripcion = $value;
                 $anuncio->save();
 	    		return Response::json(array('estado'=>1, 'id'=>$anuncio->id));
     		} catch(Exception $e) {
