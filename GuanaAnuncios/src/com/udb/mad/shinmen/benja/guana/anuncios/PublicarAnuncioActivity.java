@@ -35,9 +35,10 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.ImagenAnuncioCustomAdapter;
+import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Categoria;
+import com.udb.mad.shinmen.benja.guana.anuncios.servicios.PublicarAnuncioService;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
-import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class PublicarAnuncioActivity extends ActionBarActivity implements
@@ -150,7 +151,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 	}
 
 	private void guardarAnuncio() {
-		List<NameValuePair> parametros = new ArrayList<NameValuePair>(8);
+		/*List<NameValuePair> parametros = new ArrayList<NameValuePair>(8);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
 		parametros.add(new BasicNameValuePair("titulo", this.edtTitulo
@@ -162,9 +163,32 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 		parametros.add(new BasicNameValuePair("precio", this.edtPrecio
 				.getText().toString()));
 		parametros.add(new BasicNameValuePair("telefono", this.edtTelefono
-				.getText().toString()));
+				.getText().toString()));*/
+		
+		Anuncio anuncio = new Anuncio();
+		anuncio.setTituloAnuncio(this.edtTitulo.getText().toString());
+		anuncio.setDescripcionAnuncio(this.edtDescripcion.getText().toString());
+		anuncio.setCategoriaId(categoriaSeleccionada);
+		anuncio.setPrecio(this.edtPrecio.getText().toString());
+		anuncio.setTelefono(this.edtTelefono.getText().toString());
+		
+		Intent intent = new Intent(this, PublicarAnuncioService.class);
+		intent.putExtra(PublicarAnuncioService.ANUNCIO_EXTRA, anuncio);
+		
+		int totalImagenes = adapter.getCount();
+		if(totalImagenes > 0){
+			ArrayList<String> rutasImagenes = new ArrayList<String>();
+			for (int i = 0; i < totalImagenes; i++) {
+				rutasImagenes.add(adapter.getItem(i));
+			}
+			intent.putStringArrayListExtra(PublicarAnuncioService.ANUNCIO_IMAGENES_EXTRA, rutasImagenes);
+		}
+		startService(intent);
+		
+		finish();
 
-		JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
+		//TODO esto debería borrarse
+		/*JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
 				"http://guananuncio.madxdesign.com/index.php/anuncio/save",
 				JSONDownloaderTask.METODO_POST, parametros);
 		jdt.setOnFinishDownloadJSONObject(new PublicarAnuncioListener());
@@ -179,8 +203,8 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				pd.setIndeterminate(true);
 				pd.show();
 			}
-		});
-		jdt.execute();
+		});*/
+		//jdt.execute();
 	}
 
 	private boolean subirImagenes(String idAnuncio) {
