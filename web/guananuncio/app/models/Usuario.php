@@ -10,8 +10,8 @@ class Usuario extends ValidatorEloquent {
 		'nombre'=>'required|min:5|max:80',
 		'correo_electronico'=>'required|email',
 		'clave'=>'required|min:32',
-		'latitud'=>'required|integer',
-		'altitud'=>'required|integer',
+		'latitud'=>'required|numeric',
+		'altitud'=>'required|numeric',
 		'pais_id'=>'required|integer',
 	);
 }
