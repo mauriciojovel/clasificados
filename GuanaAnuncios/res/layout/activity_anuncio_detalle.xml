@@ -11,14 +11,14 @@
     tools:context=".AnuncioDetalleActivity" >
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTituloDetalle"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvDescripcionDetalle"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
@@ -33,10 +33,10 @@
             android:text="@string/precio_articulo" />
 
         <TextView
-            android:id="@+id/TextView03"
+            android:id="@+id/tvPrecioDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="0.00" />
     </LinearLayout>
 
     <LinearLayout
@@ -50,10 +50,10 @@
             android:text="@string/correo_contacto" />
 
         <TextView
-            android:id="@+id/TextView01"
+            android:id="@+id/tvCorreoDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="-" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,14 +64,19 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/telefono_contacto" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvTelefonoDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-
+            android:text="-" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvImagenesDetalle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

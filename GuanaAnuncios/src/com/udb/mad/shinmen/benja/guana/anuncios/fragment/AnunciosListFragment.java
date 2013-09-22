@@ -15,7 +15,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
+import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioDetalleActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnuncioCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener;
@@ -30,6 +33,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -8964105318347238707L;
+	static final String CURR_POS_DETAIL = "com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnunciosListFragment.CURR_POS";
 
 	EndlessScrollListener scrollListener;
 	List<Anuncio> anuncios;
@@ -42,6 +46,8 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	String LIMIT_MARK = "{limit}";
 	int page = 0;
 	int limit = 8;
+	int currentPos=-1;
+	boolean dualPane;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -145,6 +151,8 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 					anuncio.setCodigoAnuncio(jsonObject.getString("id"));
 					anuncio.setTituloAnuncio(jsonObject.getString("titulo"));
 					anuncio.setDescripcionAnuncio(jsonObject.getString("descripcion"));
+					anuncio.setPrecio(jsonObject.getString("precio"));
+					anuncio.setTelefono(jsonObject.getString("telefono"));
 					adapter.add(anuncio);
 				}
 			} catch (Exception e) {
@@ -160,5 +168,24 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 			// supondremos que el error es porque no te has autenticado.
 			showLogin();
 		}
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		this.currentPos = position;
+		Anuncio a = null;
+		if (currentPos >= 0) {
+            a = adapter.getItem(currentPos);
+            
+            if (dualPane) {
+            	//TODO add dual pane support
+            } else {
+                Intent i = new Intent();
+                i.setClass(getActivity(), AnuncioDetalleActivity.class);
+                i.putExtra(AnuncioDetalleFragment.ANUNCIO_DETAIL, a);
+                i.putExtra(AnuncioDetalleFragment.DUAL_PANE, false);
+                startActivity(i);
+            }
+        }
 	}
 }
