@@ -7,5 +7,8 @@
     <string name="guardarUsuarioLocalService">http://192.168.1.29:81/guananuncio/index.php/usuario/save</string>
     <string name="anunciosCercanosService">http://guananuncio.madxdesign.com/index.php/anuncio/anuncioscercanos/{page}/{limit}</string>
     <string name="imagenAnuncioService"> http://guananuncio.madxdesign.com/index.php/imagen/single/{id}</string>
+    <string name="guardarAnuncioService">http://guananuncio.madxdesign.com/index.php/anuncio/save</string>
+    <string name="guardarImagenAnuncioService">http://guananuncio.madxdesign.com/index.php/imagen/save</string>
+    <string name="categoriasService">http://guananuncio.madxdesign.com/index.php/anuncio/categorias</string>
     
 </resources>
