@@ -3,7 +3,6 @@ package com.udb.mad.shinmen.benja.guana.anuncios;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -63,7 +62,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_publicar_anuncio);
 
@@ -185,25 +184,25 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 	}
 
 	private boolean subirImagenes(String idAnuncio) {
-		
+
 		Bitmap bm = BitmapFactory.decodeFile(adapter.getItem(0), null);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.JPEG, 90, stream); 
-		byte[] byte_arr = stream.toByteArray(); 
+		bm.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+		byte[] byte_arr = stream.toByteArray();
 		String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
-		
+
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(4);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
-		parametros.add(new BasicNameValuePair("imagen",image_str));
-		parametros.add(new BasicNameValuePair("anuncio_id",idAnuncio));
+		parametros.add(new BasicNameValuePair("imagen", image_str));
+		parametros.add(new BasicNameValuePair("anuncio_id", idAnuncio));
 
 		JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
 				"http://guananuncio.madxdesign.com/index.php/imagen/save",
 				JSONDownloaderTask.METODO_POST, parametros);
 		jdt.setOnFinishDownloadJSONObject(new SubirImagenListener());
 		jdt.execute();
-		
+
 		return false;
 	}
 
@@ -218,9 +217,11 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 					Toast.makeText(activity, "Anuncio Publicado",
 							Toast.LENGTH_SHORT).show();
 					finish();
-				}else{
-					if(status.equals("-1")){
-						Toast.makeText(activity, "Ocurrio un error inesperado. Vuelva a intentar.",
+				} else {
+					if (status.equals("-1")) {
+						Toast.makeText(
+								activity,
+								"Ocurrio un error inesperado. Vuelva a intentar.",
 								Toast.LENGTH_SHORT).show();
 					}
 				}
@@ -245,10 +246,12 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				if (status.equals("1")) {
 					String id = jsonObject.getString("id");
 					subirImagenes(id);
-				}else{
-					if(status.equals("-1")){
+				} else {
+					if (status.equals("-1")) {
 						pd.dismiss();
-						Toast.makeText(activity, "Ocurrio un error inesperado. Vuelva a intentar.",
+						Toast.makeText(
+								activity,
+								"Ocurrio un error inesperado. Vuelva a intentar.",
 								Toast.LENGTH_SHORT).show();
 					}
 				}
