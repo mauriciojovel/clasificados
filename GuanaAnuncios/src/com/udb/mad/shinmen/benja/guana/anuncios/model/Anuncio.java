@@ -11,6 +11,10 @@ public class Anuncio implements Serializable {
 	private String codigoAnuncio;
 	private String tituloAnuncio;
 	private String descripcionAnuncio;
+	private String categoriaId;
+	private String precio;
+	private String telefono;
+	private String correo;
 	
 	public String getCodigoAnuncio() {
 		return codigoAnuncio;
@@ -30,7 +34,29 @@ public class Anuncio implements Serializable {
 	public void setDescripcionAnuncio(String descripcionAnuncio) {
 		this.descripcionAnuncio = descripcionAnuncio;
 	}
+	public String getCategoriaId() {
+		return categoriaId;
+	}
+	public void setCategoriaId(String categoriaId) {
+		this.categoriaId = categoriaId;
+	}
+	public String getPrecio() {
+		return precio;
+	}
+	public void setPrecio(String precio) {
+		this.precio = precio;
+	}
+	public String getTelefono() {
+		return telefono;
+	}
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
 	
-	
-
 }
