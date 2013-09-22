@@ -30,5 +30,10 @@
     <string name="titulo_espere">Por favor espere.</string>
     <string name="buscar_anuncios">Buscar anuncios</string>
     <string name="title_activity_anuncio_detalle">AnuncioDetalleActivity</string>
+    <string name="activa">Activar</string>
+    <string name="desactivar">Desactivar</string>
+    <string name="wifi">Wifi</string>
+    <string name="tresGe">3G</string>
+    <string name="connectionDialog">¿Activar/Desactiva conexión a internet?</string>
 
 </resources>
