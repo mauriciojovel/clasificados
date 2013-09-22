@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class AnunciosCercanosCustomAdapter extends BaseAdapter{
 
@@ -70,10 +71,12 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
         //vi.findViewById(R.string.imagenAnuncioService).toString();
         url = url.replace("{id}", String.valueOf(dato.get("codigo")));
         
-        SharedPreferences prefs = activity.getSharedPreferences(
+        /*SharedPreferences prefs = activity.getSharedPreferences(
 				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
 		String usuario = prefs.getString("usuario", "");
-		String token = prefs.getString("token", "");
+		String token = prefs.getString("token", "");*/
+        String usuario = PreferenciasUsuario.getUsuario(activity);
+		String token = PreferenciasUsuario.getToken(activity);
         
 		url = url + "?usuario="+usuario+"&token="+token;
 		
