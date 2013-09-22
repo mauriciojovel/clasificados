@@ -188,7 +188,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 		
 		Bitmap bm = BitmapFactory.decodeFile(adapter.getItem(0), null);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.PNG, 90, stream); 
+		bm.compress(Bitmap.CompressFormat.JPEG, 90, stream); 
 		byte[] byte_arr = stream.toByteArray(); 
 		String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 		
