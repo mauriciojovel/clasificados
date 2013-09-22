@@ -95,8 +95,8 @@ public class RegistroActivity extends ActionBarActivity implements
 				&& !edtRegCorreo.getText().toString().equals("")
 				&& !edtRegPass.getText().toString().equals("")) {
 
-			SharedPreferences prefs = getSharedPreferences(
-					"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
+			/*SharedPreferences prefs = getSharedPreferences(
+					"GuanaAnunciosPreferences", Context.MODE_PRIVATE);*/
 
 			/* Obteniendo la longitud y latitud del usuario */
 			LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -111,7 +111,7 @@ public class RegistroActivity extends ActionBarActivity implements
 
 			gu.registrarUsuario(codigoPais, edtRegCorreo.getText().toString(),
 					edtRegPass.getText().toString(), edtRegAlias.getText()
-							.toString(), prefs, latitud.toString(), longitud
+							.toString(), null, latitud.toString(), longitud
 							.toString());
 
 		} else {
