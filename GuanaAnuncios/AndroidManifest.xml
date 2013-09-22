@@ -35,7 +35,8 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
@@ -58,6 +59,10 @@
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.PublicarAnuncioActivity"
             android:label="@string/title_activity_publicar_anuncio" >
+        </activity>
+        <activity
+            android:name="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioDetalleActivity"
+            android:label="@string/title_activity_anuncio_detalle" >
         </activity>
 
         <meta-data
