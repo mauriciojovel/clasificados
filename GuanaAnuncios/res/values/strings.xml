@@ -29,5 +29,6 @@
     <string name="titulo_procesando">Procesando.</string>
     <string name="titulo_espere">Por favor espere.</string>
     <string name="buscar_anuncios">Buscar anuncios</string>
+    <string name="title_activity_anuncio_detalle">AnuncioDetalleActivity</string>
 
 </resources>
