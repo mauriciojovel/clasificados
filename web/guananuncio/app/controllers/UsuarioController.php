@@ -22,9 +22,16 @@ class UsuarioController extends AutheticatedController {
 	    		$user = Usuario::where('nombre','=',$usuario)->orWhere('correo_electronico','=',$usuario)->firstOrFail();
 	    		
     			if($user->clave == $clave) {
-    				$newToken = $this->token();
-    				$user->token = $newToken;
-    				$user->save();
+                    $user->save();
+                    $newToken = $this->token();
+                    try {
+                        $token = Token::where('usuario_id', '=', $user->id)
+                                        ->where('dispositivo','=', Input::get('dispositivo'))->firstOrFail();                        
+                    } catch(ModelNotFoundException $e) {
+                        $token = new Token(Input::all());
+                        $token->usuario_id = $user->id;
+                    }
+                    $token->save();
     				return Response::json(array('estado'=>'1','errors'=>array(),'token'=>$newToken));
     			} else {
     				return Response::json(array('estado'=>'0','errors'=>array('clave'=>'Clave invalida')));
@@ -47,8 +54,11 @@ class UsuarioController extends AutheticatedController {
     		$usuario->fill($input);
     		try {
     			$newToken = $this->token();
-    			$usuario->token = $newToken;
+    			//$usuario->token = $newToken;
 	    		$usuario->save();
+                $token = new Token(Input::all());
+                $token->usuario_id = $usuario->id;
+                $token->save();
 	    		return Response::json(array('estado'=>'1', 'errors'=>array(),'token'=>$newToken));
 	    	} catch(Exception $e) {
 	    		$m = '';

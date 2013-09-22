@@ -25,6 +25,7 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 	public static final String TOKEN = "token";
 	public static final String USUARIO = "usuario";
 	public static final String CLAVE = "clave";
+	public static final String DISPOSITIVO = "dispositivo";
 	
 	private JSONDownloaderTask<JSONObject> jsonTask;
 	//private SharedPreferences prefs;
@@ -44,6 +45,8 @@ public class GestionLoginImpl implements GestionLogin, JSONDownloaderTask.OnFini
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(1);
 		parametros.add(new BasicNameValuePair(USUARIO, usuario));
 		parametros.add(new BasicNameValuePair(CLAVE, encryptedPass));
+		parametros.add(new BasicNameValuePair(DISPOSITIVO
+				, android.os.Build.MODEL));
 		 
 		jsonTask = new JSONDownloaderTask<JSONObject>(url, JSONDownloaderTask.METODO_POST, parametros);		
 		jsonTask.setOnFinishDownload(this);

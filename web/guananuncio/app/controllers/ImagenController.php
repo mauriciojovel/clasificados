@@ -28,13 +28,13 @@ class ImagenController extends AutheticatedController {
     }
 
 	public function postSave() {
-        if(Input::hasFile('imagen')) {
+        //if(Input::hasFile('imagen')) {
         	$imagen = new Imagen(Input::all());
         	if($imagen->validate(Input::all())) {
         		try {
         			/*$user = Usuario::where('nombre',=,Input::get('usuario'))->firstOrFail();
         			$imagen->usuario_id = $user->id;*/
-                    $file = Input::file('imagen');
+                    /*$file = Input::file('imagen');
                     $destinationPath = 'uploads/'.str_random(8);
                     $filename = $file->getClientOriginalName();
                     $uploadSuccess = $file->move($destinationPath, $filename);
@@ -45,7 +45,11 @@ class ImagenController extends AutheticatedController {
                         return Response::json(array('estado'=>1));
                     } else {
                         return Response::json(array('estado'=>0,'errors'=>array('mensaje'=>'No se pudo cargar la imagen.')));
-                    }
+                    }*/
+                    $imagen->imagen = base64_decode($imagen->imagen);
+                    $imagen->fecha_creacion = date('Y-m-d H:i:s');
+                    $imagen->save();
+                    return Response::json(array('estado'=>1));
         		}/* catch(ModelNotFoundException $e) {
         			return Response::json(array('estado'=>-1,'errors'=>array('mensaje'=>'Usuario no encontrado')));
         		}*/catch(Exception $e) {
@@ -54,8 +58,8 @@ class ImagenController extends AutheticatedController {
         	} else {
         		return Response::json(array('estado'=>0, 'errors'=>$imagen->errors()->getMessages()));
         	}
-        } else {
-            return Response::json(array('estado'=>0, 'errors'=>array('imagen'=>'Es obligatorio el archivo')));
-        }
+        //} else {
+        //    return Response::json(array('estado'=>0, 'errors'=>array('imagen'=>'Es obligatorio el archivo')));
+        //}
     }
 }

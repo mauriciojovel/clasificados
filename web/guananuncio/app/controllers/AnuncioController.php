@@ -39,7 +39,8 @@ class AnuncioController extends AutheticatedController {
                 $anuncio->usuario_id = $user->id;
                 $anuncio->fecha_creacion = date('Y-m-d H:i:s');
                 $anuncio->es_activo = 1;
-	    		$anuncio->save();
+                //$anuncio->anuncio=base64_decode($anuncio->imagen);
+                $anuncio->save();
 	    		return Response::json(array('estado'=>1, 'id'=>$anuncio->id));
     		} catch(Exception $e) {
     			return Response::json(array('estado'=>-1,'errors'=>array('mensaje'=>'Error no esperado, vuelva a intentar')));

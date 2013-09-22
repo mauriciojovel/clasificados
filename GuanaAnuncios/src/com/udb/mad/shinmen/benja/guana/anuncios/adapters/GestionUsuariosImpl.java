@@ -16,11 +16,12 @@ import android.util.Log;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.udb.mad.shinmen.benja.guana.anuncios.AnunciosCercanosActivity;
+import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.RegistroActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class GestionUsuariosImpl implements GestionUsuarios,
 		JSONDownloaderTask.OnFinishDownload<JSONArray>,
@@ -39,6 +40,7 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 	public static final String ESTADO = "estado";
 	public static final String TOKEN = "token";
 	public static final String USUARIO = "usuario";
+	public static final String DISPOSITIVO = "dispositivo";
 
 	ArrayList<Map<String, Object>> paises;
 	private PaisCustomAdapter adapter;
@@ -48,7 +50,7 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 	public int position;
 	private JSONDownloaderTask<JSONArray> jsonTask;
 	private JSONDownloaderTask<JSONObject> jsonTaskObj;
-	private SharedPreferences prefs;
+	//private SharedPreferences prefs;
 	private String usuario;
 
 	public GestionUsuariosImpl(RegistroActivity activity) {
@@ -60,7 +62,7 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 	public void registrarUsuario(String pais, String correoElectronicoUsuario,
 			String claveUsuario, String alias, SharedPreferences prefs, String latitud, String altitud) {
 
-		this.prefs = prefs;
+		//this.prefs = prefs;
 		this.usuario = alias;
 		
 		String encryptedPass = MD5Utility.md5(claveUsuario);
@@ -76,6 +78,8 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 		parametros.add(new BasicNameValuePair(CLAVE, encryptedPass));
 		parametros.add(new BasicNameValuePair(LATITUD, latitud));
 		parametros.add(new BasicNameValuePair(ALTITUD, altitud));
+		parametros.add(new BasicNameValuePair(DISPOSITIVO
+				, android.os.Build.MODEL));
 
 		/* URL del servicio */
 		String url = activity.getResources().getString(
@@ -157,8 +161,7 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("GestionUsuarios", e.getMessage(), e);
 		}
 	}
 
@@ -179,13 +182,15 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 				 * */
 				String token = jsonData.getString(TOKEN);
 				
-				SharedPreferences.Editor editor = prefs.edit();
+				/*SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(TOKEN, token);
 				editor.putString(USUARIO, usuario);
-				editor.commit();
+				editor.commit();*/
+				PreferenciasUsuario.setToken(token, activity);
+				PreferenciasUsuario.setUsuario(usuario, activity);
 
 				/*Si el registro es exitoso se inicia la siguiente actividad*/
-				Intent intento = new Intent(activity, AnunciosCercanosActivity.class);
+				Intent intento = new Intent(activity, AnuncioActivity.class);
 				activity.startActivity(intento);
 				
 				/*
@@ -213,7 +218,8 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			Log.e("GestionUsuario", e.getMessage(), e);
 			Toast.makeText(activity,
 					"Error al guardar usuario: " + e.toString(),
 					Toast.LENGTH_SHORT).show();
