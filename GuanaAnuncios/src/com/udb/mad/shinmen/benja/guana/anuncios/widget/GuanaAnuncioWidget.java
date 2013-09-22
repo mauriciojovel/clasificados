@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
@@ -48,6 +49,12 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 			Log.e("GuanaAnuncio", "onUpdate method, anunciosList.size = null");
 		}
 		
+		remoteViews.setViewVisibility(R.id.wgTitulo, View.INVISIBLE);
+		remoteViews.setViewVisibility(R.id.wgDescripcion, View.INVISIBLE);
+		remoteViews.setViewVisibility(R.id.wgProgress, View.VISIBLE);
+		
+		pushWidgetUpdate(context,remoteViews);
+		
 		cargarData();
 		
 
@@ -73,6 +80,7 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 		ComponentName myWidget = new ComponentName(context,
 				GuanaAnuncioWidget.class);
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
+		
 		manager.updateAppWidget(myWidget, remoteViews);
 	}
 
@@ -83,7 +91,10 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
 		String usuario = prefs.getString("usuario", "");
 		String token = prefs.getString("token", "");
-
+		
+		Log.e("GuanaAnuncio", "cargarData method, usuario = " + usuario);
+		Log.e("GuanaAnuncio", "cargarData method, token = " + token);
+		
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
@@ -96,6 +107,7 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 
 		if (anunciosList == null || anunciosList.size() == 0) {
 			anunciosList = new ArrayList<HashMap<String, Object>>();
+			Log.e("GuanaAnuncio", "cargarData method, anunciosList == null || anunciosList.size() == 0");
 		}
 
 		/* Tarea asincrona que recupera los datos */
@@ -124,12 +136,29 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 					anuncio.put("titulo", jsonObject.getString("titulo"));
 					anuncio.put("descripcion",
 							jsonObject.getString("descripcion"));
+					anuncio.put("codigo", jsonObject.getString("id"));
 					anunciosList.add(anuncio);
 				}
 			} catch (Exception e) {
 				Log.e("error", e.getMessage());
 			}
 			
+			if(anunciosList.size()>0){
+				
+				HashMap<String, Object> anuncio = anunciosList.get(anunciosList.size()-1);
+
+				Log.e("GuanaAnuncio",
+						"BusquedaAnunciosListener method");
+				String titulo = anuncio.get("titulo").toString();
+				String descripcion = anuncio.get("descripcion").toString();
+
+				remoteViews.setTextViewText(R.id.wgTitulo, titulo);
+				remoteViews.setTextViewText(R.id.wgDescripcion, descripcion);
+				remoteViews.setViewVisibility(R.id.wgTitulo, View.VISIBLE);
+				remoteViews.setViewVisibility(R.id.wgDescripcion, View.VISIBLE);
+				remoteViews.setViewVisibility(R.id.wgProgress, View.INVISIBLE);	
+				
+			}
 			// boton flecha izquierda
 			remoteViews.setOnClickPendingIntent(R.id.leftArrow,
 					buildLeftButtonPendingIntent(ctx, anunciosList));
