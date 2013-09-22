@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
 
@@ -41,13 +42,14 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
         
         /*Cargando la imagen asincronamente*/
         //obteniendo la direccion URL para descargar la imagen
-       /* String url = "http://guananuncio.madxdesign.com/anuncio/single/{id}";//TODO
+        String url = vi.getResources().getString(R.string.imagenAnuncioService);
         url = url.replace("{id}", String.valueOf(a.getCodigoAnuncio()));
+        url = url + "?usuario="+PreferenciasUsuario.getUsuario(activity)+"&token="+PreferenciasUsuario.getToken(activity);
         
         //ejecutando la tarea asincrona
         if(imagen != null){
         	new ImageDownloaderTask(imagen).execute(url);
-        } */
+        } 
         
         return vi;
 	}
