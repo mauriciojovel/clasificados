@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,13 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
         //vi.findViewById(R.string.imagenAnuncioService).toString();
         url = url.replace("{id}", String.valueOf(dato.get("codigo")));
         
+        SharedPreferences prefs = activity.getSharedPreferences(
+				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
+		String usuario = prefs.getString("usuario", "");
+		String token = prefs.getString("token", "");
+        
+		url = url + "?usuario="+usuario+"&token="+token;
+		
         //ejecutando la tarea asincrona
         if(imagen != null){
         	new ImageDownloaderTask(imagen).execute(url);
