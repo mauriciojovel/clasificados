@@ -4,7 +4,7 @@ class ImagenController extends AutheticatedController {
 	public function getDownload($id) {
 		try {
 			$image = Imagen::findOrFail($id);
-			return Response::make($image->imagen, 200, array('content-type' => 'image/jpg'));
+			return Response::make($image->imagen, 200, array('content-type' => 'image/jpeg'));
 		} catch(ModelNotFoundException $e){
             return $e->getMessage();
         }
@@ -13,7 +13,7 @@ class ImagenController extends AutheticatedController {
     public function getSingle($id) {
         try {
             $image = Imagen::where('anuncio_id','=',$id)->firstOrFail();
-            return Response::make($image->imagen, 200, array('content-type' => 'image/jpg'));
+            return Response::make($image->imagen, 200, array('content-type' => 'image/jpeg'));
         } catch(ModelNotFoundException $e){
             return $e->getMessage();
         }

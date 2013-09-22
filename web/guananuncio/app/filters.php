@@ -49,8 +49,9 @@ Route::filter('auth.token', function()
 	$name = Input::get('usuario');
 	$token = Input::get('token');
 	try {
-		Usuario::where('nombre','=',$name)
-		         ->where('token','=',$token)->firstOrFail();
+		Usuario::join('token','token.usuario_id', '=', 'usuario.id')
+				 ->where('usuario.nombre','=',$name)
+		         ->where('token.token','=',$token)->firstOrFail();
 	}catch(Exception $e) {
 		return Response::json(array('estado'=>-2,'errors'=>array('mensaje'=>'Usuario no autenticado')));
 	}
