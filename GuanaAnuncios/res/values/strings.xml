@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Guana Anuncios</string>
-    <string name="title_activity_anuncio"></string>
+    <string name="title_activity_anuncio">Guananuncios</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Inicio sesion</string>
     <string name="losginUsuario">Usuario</string>
