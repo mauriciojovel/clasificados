@@ -162,8 +162,12 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 				Log.e("error", e.getMessage());
 			}
 			
-			adapter.notifyDataSetChanged();
-			AnunciosListFragment.this.setListShownNoAnimation(true);
+			if(adapter != null){
+				adapter.notifyDataSetChanged();
+			}
+			if(AnunciosListFragment.this.getView() != null){
+				AnunciosListFragment.this.setListShownNoAnimation(true);
+			}
 		}
 
 		@Override
