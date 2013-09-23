@@ -33,4 +33,18 @@ public class UbicacionUtility {
             return 0.0;
         }
     }
+    
+    public static double getLongitud(Context ctx) {
+        Location location;
+        try {
+            LocationManager lm = (LocationManager) ctx
+                    .getSystemService(Context.LOCATION_SERVICE);
+            location = lm
+            .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            return location.getAltitude();
+        } catch (Exception e) {
+            Log.e("UbicacionUtility", "Pudo ser porque no tiene gps", e);
+            return 0.0;
+        }
+    }
 }

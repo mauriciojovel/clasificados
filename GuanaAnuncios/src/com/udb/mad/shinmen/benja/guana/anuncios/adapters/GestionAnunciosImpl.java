@@ -10,12 +10,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.udb.mad.shinmen.benja.guana.anuncios.AnunciosCercanosActivity;
@@ -138,7 +141,7 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 		
 	}
 
-	private void dibujarPuntosAnuncios() {
+	/*private void dibujarPuntosAnuncios() {
 
 		if (anunciosList != null && anunciosList.size() > 0) {
 
@@ -157,16 +160,58 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 				Circle circle = mMap.addCircle(circleOptions);
 
 			}
-		}
-		
-		/*para indicar que ya se cargo la data en el listview*/
+			
+		}		
 		activity.flag_loading = false;
-	}
+	}*/
+    private void dibujarPuntosAnuncios() {
+
+        mMap.clear();
+        double lat = 0;
+        double lon = 0;
+        if (anunciosList != null && anunciosList.size() > 0) {
+
+            for (HashMap<String, Object> anuncio : anunciosList) {
+
+                CircleOptions circleOptions = new CircleOptions();
+                lat = Double.valueOf(anuncio.get(LATITUD).toString());
+                lon = Double.valueOf(anuncio.get(ALTITUD).toString());
+                circleOptions.center(new LatLng(lat, lon));
+                circleOptions.fillColor(Color.RED);
+                circleOptions.radius(50);
+                circleOptions.strokeWidth(1);
+                
+                mMap.addCircle(circleOptions);
+
+            }
+        }
+
+        LocationManager lm = (LocationManager) activity
+                .getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm
+                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        // Circulo que representa el area de auncios visibles
+        CircleOptions circleArea = new CircleOptions();
+        lat = location.getLatitude();
+        lon = location.getLongitude();
+        Log.e("GuanaAnuncios", "Latitud=" + lat);
+        Log.e("GuanaAnuncios", "Longitud=" + lon);
+        circleArea.center(new LatLng(lat, lon));
+        circleArea.fillColor(0x3381F781);
+        circleArea.radius(1000);
+        circleArea.strokeWidth(1);
+        mMap.addCircle(circleArea);
+
+        /* para indicar que ya se cargo la data en el listview */
+        activity.flag_loading = false;
+    }
+	
+	
 
 	@Override
 	public void loadError() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }
