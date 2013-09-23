@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -24,6 +24,7 @@
     
     <style name="boldText">
         <item name="android:textStyle">bold</item>
+        <item name="android:paddingRight">5dp</item>
     </style>
     
     <!-- Login buttons theme. -->
