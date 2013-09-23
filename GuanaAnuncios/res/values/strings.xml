@@ -28,7 +28,7 @@
     <string name="titulo_procesando">Procesando.</string>
     <string name="titulo_espere">Por favor espere.</string>
     <string name="buscar_anuncios">Buscar anuncios</string>
-    <string name="title_activity_anuncio_detalle"></string>
+    <string name="title_activity_anuncio_detalle">Anuncio</string>
     <string name="activa">Activar</string>
     <string name="desactivar">Desactivar</string>
     <string name="wifi">Wifi</string>

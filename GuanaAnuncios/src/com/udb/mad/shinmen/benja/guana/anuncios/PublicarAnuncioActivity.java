@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -83,6 +84,8 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 		}
 
 		lvImagenes.setAdapter(adapter);
+		
+		setupActionBar();
 
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
@@ -106,6 +109,11 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 		jdt.execute();
 	}
 
+	private void setupActionBar() {
+	    ActionBar actionBar = getSupportActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

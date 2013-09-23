@@ -21,7 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/titulo_anuncio" />
+        android:maxLength="45"
+        android:hint="@string/titulo_anuncio" >
+        <requestFocus />
+     </EditText>
 
     <EditText
         android:id="@+id/edtDescripcion"
@@ -29,10 +32,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/descripcion_articulo"
-        android:inputType="textMultiLine" >
-
-        <requestFocus />
-    </EditText>
+        android:inputType="textMultiLine"
+        android:maxLength="750"
+        android:minLines="3" />
 
     <EditText
         android:id="@+id/edtPrecio"
