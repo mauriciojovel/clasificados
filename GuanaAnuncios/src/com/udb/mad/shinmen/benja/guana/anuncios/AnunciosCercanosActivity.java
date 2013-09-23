@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -32,7 +31,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnunciosCercanosCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionAnunciosImpl;
-import com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnuncioDetalleFragment;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 
 public class AnunciosCercanosActivity extends ActionBarActivity implements
@@ -171,7 +169,9 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 	public void onItemClick(AdapterView<?> listview, View view, int position, long id) {
 		// TODO Auto-generated method stub
 		
-		HashMap<String, Object> item = (HashMap<String, Object>) listview.getItemAtPosition(position);
+		@SuppressWarnings("unchecked")
+        HashMap<String, Object> item = (HashMap<String, Object>) 
+                                        listview.getItemAtPosition(position);
 		
 		Anuncio anuncio = new Anuncio();
 		anuncio.setCodigoAnuncio(item.get("codigo").toString());

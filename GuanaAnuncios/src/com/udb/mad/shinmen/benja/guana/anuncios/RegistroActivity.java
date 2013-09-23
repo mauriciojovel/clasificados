@@ -2,7 +2,6 @@ package com.udb.mad.shinmen.benja.guana.anuncios;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
