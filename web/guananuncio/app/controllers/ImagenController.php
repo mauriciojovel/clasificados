@@ -20,7 +20,20 @@ class ImagenController extends AutheticatedController {
     }
 
     public function postSingle($id) {
-        $this->getSingle($id);
+        return $this->getSingle($id);
+    }
+
+    public function getList($id) {
+        try {
+            $image = Imagen::where('anuncio_id','=',$id)->select('id')->get();
+            return Response::json(array('estado'=>'1', 'imagenes'=>$imagen));
+        } catch(Exception $e){
+            return Response::json(array('estado'=>0, 'error'=>$e->getMessage()));
+        }
+    }
+
+    public function postList($id) {
+        return $this->getList($id);
     }
 
     public function postDownload($id) {
