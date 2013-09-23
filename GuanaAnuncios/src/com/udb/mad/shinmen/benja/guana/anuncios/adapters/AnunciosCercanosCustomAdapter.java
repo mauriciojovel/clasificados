@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
-import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloader;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class AnunciosCercanosCustomAdapter extends BaseAdapter{
@@ -22,12 +21,21 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
 	private Activity activity;
     private ArrayList<HashMap<String, Object>> data;
     private static LayoutInflater inflater=null;
-    //public ImageLoader imageLoader; 
+    private final ImageDownloader imageDownloader;
+    static class Holder {
+        TextView title;
+        TextView description;
+        TextView codigo;
+        ImageView imagen;
+    }
     
-    public AnunciosCercanosCustomAdapter(Activity a, ArrayList<HashMap<String, Object>> d) {
+    public AnunciosCercanosCustomAdapter(Activity a
+            , ArrayList<HashMap<String, Object>> d) {
         activity = a;
         data=d;
-        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater)activity
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        imageDownloader = new ImageDownloader();
     }
 
 	@Override
@@ -49,44 +57,42 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi=convertView;
-        if(convertView==null)
+		Holder h;
+		String url = vi.getResources().getString(R.string.imagenAnuncioService);
+		
+        if(convertView==null) {
             vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);
- 
-        TextView title = (TextView)vi.findViewById(R.id.title);
-        TextView description = (TextView)vi.findViewById(R.id.description);
-        TextView codigo = (TextView) vi.findViewById(R.id.codigo);
-        ImageView imagen = (ImageView) vi.findViewById(R.id.list_image);
+            h = new Holder();
+            h.title = (TextView)vi.findViewById(R.id.title);
+            h.description = (TextView)vi.findViewById(R.id.description);
+            h.codigo = (TextView) vi.findViewById(R.id.codigo);
+            h.imagen = (ImageView) vi.findViewById(R.id.list_image);
+            vi.setTag(h);
+        } else {
+            h = (Holder) vi.getTag();
+        }
  
         HashMap<String, Object> dato = new HashMap<String, Object>();
         dato = data.get(position);
  
         // Setting all values in listview
-        title.setText(String.valueOf(dato.get("titulo")));
-        description.setText(String.valueOf(dato.get("descripcion")));
-        codigo.setText(String.valueOf(dato.get("codigo")));
+        h.title.setText(String.valueOf(dato.get("titulo")));
+        h.description.setText(String.valueOf(dato.get("descripcion")));
+        h.codigo.setText(String.valueOf(dato.get("codigo")));
         
         /*Cargando la imagen asincronamente*/
-        //obteniendo la direccion URL para descargar la imagen
-        String url = vi.getResources().getString(R.string.imagenAnuncioService);
-        //vi.findViewById(R.string.imagenAnuncioService).toString();
         url = url.replace("{id}", String.valueOf(dato.get("codigo")));
-        
-        /*SharedPreferences prefs = activity.getSharedPreferences(
-				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
-		String usuario = prefs.getString("usuario", "");
-		String token = prefs.getString("token", "");*/
-        String usuario = PreferenciasUsuario.getUsuario(activity);
-		String token = PreferenciasUsuario.getToken(activity);
-        
-		url = url + "?usuario="+usuario+"&token="+token;
+		url = url + "?usuario="+PreferenciasUsuario.getUsuario(activity)
+		        +"&token="+PreferenciasUsuario.getToken(activity);
 		
-        //ejecutando la tarea asincrona
-        if(imagen != null){
-        	new ImageDownloaderTask(imagen).execute(url);
-        }         
+		imageDownloader.download(url,h.imagen);         
         
         return vi;
 	}
+	
+	public ImageDownloader getImageDownloader() {
+        return imageDownloader;
+    }
 		
 
 }
