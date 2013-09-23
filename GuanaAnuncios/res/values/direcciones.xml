@@ -12,4 +12,5 @@
     <string name="categoriasService">http://guananuncio.madxdesign.com/index.php/anuncio/categorias</string>
     <string name="listaImagenesAnuncioService">http://guananuncio.madxdesign.com/index.php/imagen/list/{id}</string>
     <string name="descargarImagenAnuncioService">http://guananuncio.madxdesign.com/index.php/imagen/download/{id}</string>
+    <string name="eliminarAnuncioService">http://guananuncio.madxdesign.com/index.php/anuncio/inactivar/{id}</string>
 </resources>

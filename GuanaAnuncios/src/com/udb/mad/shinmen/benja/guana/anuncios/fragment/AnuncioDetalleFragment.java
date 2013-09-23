@@ -16,15 +16,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.ImagenRemotaAnuncioCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnFinishDownloadJSONObject;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class AnuncioDetalleFragment extends Fragment {
@@ -90,6 +93,32 @@ public class AnuncioDetalleFragment extends Fragment {
 			}
 		}
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_eliminar_anuncio:
+			eliminarAnuncio();
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}		
+	}
+
+	private void eliminarAnuncio() {
+		String url = activity.getResources()
+					.getString(R.string.eliminarAnuncioService)
+					.replaceAll("\\{id\\}", getAnuncio().getCodigoAnuncio());
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
+		parametros.add(new BasicNameValuePair("usuario", usuario));
+		parametros.add(new BasicNameValuePair("token", token));
+		JSONDownloaderTask<JSONObject> jdt = new JSONDownloaderTask<JSONObject>(
+				url,
+				JSONDownloaderTask.METODO_POST, parametros);
+		jdt.setOnFinishDownloadJSONObject(new InactivarAnuncioListener());
+		jdt.execute();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,6 +151,42 @@ public class AnuncioDetalleFragment extends Fragment {
 	
 	public boolean isDualPane() {
 		return getArguments().getBoolean(DUAL_PANE);
+	}
+	
+	private class InactivarAnuncioListener implements 
+			OnFinishDownloadJSONObject<JSONObject>{
+
+		@Override
+		public void onFinishDownloadJSONObject(JSONObject json) {
+			String status;
+			try {
+				status = json.getString("estado");
+				if(status.equals("1")) {
+					Toast.makeText(activity, "Se elimino el anuncio"
+							, Toast.LENGTH_SHORT).show();
+					// Finalizamos la actividad.
+					getActivity().finish();
+				} else {
+					String mensaje = json.getJSONObject("errors")
+							.getString("mensaje");
+					Toast.makeText(activity
+							, "Ups no se elimino :( prueba de nuevo "+mensaje
+							, Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				Log.e("AnuncioDetalleFragment", "Error al eliminar el anuncio"
+						, e);
+				Toast.makeText(activity
+						, "Ocurrio algo malo :'( Vuelve a probar. "
+						, Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		public void loadError() {
+			
+		}
+		
 	}
 
 	private class ListaImagenesDownloadListener implements
