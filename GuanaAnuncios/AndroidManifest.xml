@@ -34,7 +34,8 @@
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity"
-            android:label="@string/title_activity_anuncio" >
+            android:label="@string/title_activity_anuncio" 
+            android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,6 +48,8 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+            <meta-data android:name="android.support.UI_OPTIONS"
+                   android:value="splitActionBarWhenNarrow" />
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.RegistroActivity"
