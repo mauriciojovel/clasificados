@@ -10,12 +10,14 @@ import android.widget.TextView;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
-import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.ImageDownloader;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
 
 	private Activity activity;
+	private final ImageDownloader imageDownloader;
+
 	
 	static class Holder{
 		TextView title;
@@ -27,6 +29,7 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
 	public AnuncioCustomAdapter(Activity activity) {
 		super(activity, R.layout.anuncios_cercanos_layout);
 		this.activity = activity;
+		imageDownloader = new ImageDownloader();
 	}
 
 	@Override
@@ -53,6 +56,7 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
         h.title.setText(a.getTituloAnuncio());
         h.description.setText(a.getDescripcionAnuncio());
         h.codigo.setText(a.getCodigoAnuncio());
+        h.imagen.setImageDrawable(activity.getResources().getDrawable(R.drawable.guana_logo));
         
         /*Cargando la imagen asincronamente*/
         //obteniendo la direccion URL para descargar la imagen
@@ -60,11 +64,12 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
         url = url.replace("{id}", String.valueOf(a.getCodigoAnuncio()));
         url = url + "?usuario="+PreferenciasUsuario.getUsuario(activity)+"&token="+PreferenciasUsuario.getToken(activity);
         
-        //ejecutando la tarea asincrona
-        if(h.imagen != null){
-        	new ImageDownloaderTask(h.imagen).execute(url);
-        } 
+        imageDownloader.download(url,h.imagen);
         
         return vi;
 	}
+	
+	public ImageDownloader getImageDownloader() {
+        return imageDownloader;
+    }
 }

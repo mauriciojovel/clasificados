@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+@Deprecated
 public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 	
 	private final WeakReference<ImageView> imageViewReference;
