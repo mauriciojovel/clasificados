@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Guana anuncios</string>
+    <string name="app_name">Guana Anuncios</string>
     <string name="title_activity_anuncio">AnuncioActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -16,14 +16,14 @@
     <string name="regAlias">Alias</string>
     <string name="btnCancelar">Cancelar</string>
     <string name="title_activity_registro">RegistroActivity</string>
-    <string name="title_activity_publicar_anuncio">PublicarAnuncioActivity</string>
+    <string name="title_activity_publicar_anuncio">Publicar Anuncio</string>
     <string name="seleccion_categoria">Seleccione una categoría</string>
     <string name="descripcion_articulo">Descripción del artículo</string>
     <string name="precio_articulo">Precio</string>
     <string name="correo_contacto">Correo de contacto</string>
     <string name="telefono_contacto">Teléfono de contacto</string>
     <string name="lbl_seleccione">Seleccione</string>
-    <string name="title_activity_anuncios_cercanos">AnunciosCercanosActivity</string>
+    <string name="title_activity_anuncios_cercanos">Anuncios Cerca de Mí</string>
     <string name="lblListadoAnuncios">Listado de anuncios cercanos</string>
     <string name="titulo_anuncio">Titulo del anuncio</string>
     <string name="titulo_procesando">Procesando.</string>
@@ -35,5 +35,9 @@
     <string name="wifi">Wifi</string>
     <string name="tresGe">3G</string>
     <string name="connectionDialog">¿Activar/Desactiva conexión a internet?</string>
+    <string name="titulo_publicar_anuncio">Publicar</string>
+    <string name="titulo_adjuntar_imagen">Adjuntar Imagen</string>
+    <string name="titulo_recargar_anuncios">Recargar Anuncios</string>
+    <string name="titulo_buscar_anuncios">Buscar Anuncios</string>
 
 </resources>

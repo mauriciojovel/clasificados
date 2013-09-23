@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/action_publicar_anuncio"
-        android:title="@string/title_activity_publicar_anuncio"
+        android:title="@string/titulo_publicar_anuncio"
         app:showAsAction="ifRoom" 
         android:icon="@drawable/ic_publicar_anuncio"/>
     
     <item
         android:id="@+id/action_adjuntar_imagen"
-        android:title="@string/title_activity_publicar_anuncio"
+        android:title="@string/titulo_adjuntar_imagen"
         app:showAsAction="ifRoom" 
         android:icon="@drawable/ic_adjuntar_imagen"/>
 
