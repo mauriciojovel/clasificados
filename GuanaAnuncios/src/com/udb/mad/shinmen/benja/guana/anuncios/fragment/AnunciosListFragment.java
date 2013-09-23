@@ -15,11 +15,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioDetalleActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
+import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnuncioCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener;
 import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener.onScrollEndListener;
@@ -48,6 +50,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	int limit = 8;
 	int currentPos=-1;
 	boolean dualPane;
+	boolean showMyCommercial = false;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -72,10 +75,31 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 			getListView().setOnScrollListener(scrollListener);
 			setListShownNoAnimation(false);
 			handleIntent(getActivity().getIntent());
+			setHasOptionsMenu(true);
 		} else {
 			// Se tiene que levantar la actividad de login y finalizar esta
 			// actividad.
 			showLogin();
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_mis_anuncios:
+			showMyCommercial = !showMyCommercial;
+			if(showMyCommercial) {
+				item.setTitle(R.string.todos_anuncios);
+				item.setIcon(R.drawable.ic_action_todos_anuncios);
+			} else {
+				item.setTitle(R.string.mis_anuncios);
+				item.setIcon(R.drawable.ic_action_mis_anuncios);
+			}
+			buscar();
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 	
@@ -111,6 +135,9 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 		parametros.add(new BasicNameValuePair("usuario", usuario));
 		parametros.add(new BasicNameValuePair("token", token));
 		parametros.add(new BasicNameValuePair("texto", query));
+		if(showMyCommercial) {
+			parametros.add(new BasicNameValuePair("nombre", usuario));
+		}
 
 		String url = "http://guananuncio.madxdesign.com/index.php/anuncio/anunciosbusqueda/{page}/{limit}";
 

@@ -102,7 +102,7 @@ class AnuncioController extends AutheticatedController {
         $latitud = Input::get('latitud');
         $categoria = Input::get('categoria');
         $texto = Input::get('texto');
-        $usuario = Input::get('usuario');
+        $usuario = Input::get('nombre');
         $query = Anuncio::join('usuario','usuario.id','=','anuncio.usuario_id')
             ->where('es_activo','=','1');
 
@@ -125,7 +125,7 @@ class AnuncioController extends AutheticatedController {
 	        $query->where('usuario.latitud','<=',$latitud+$this->rangeLatitud);
 	}
 	if(isset($usuario)&&$usuario!= '') {
-		$query->where('usuario.nombre','<=',$usuario);
+		$query->where('usuario.nombre','=',$usuario);
 	}
         $query->select('anuncio.id','anuncio.titulo', 'anuncio.descripcion', 'anuncio.fecha_creacion', 'anuncio.es_activo', 'anuncio.precio', 'anuncio.telefono', 'usuario.latitud', 'usuario.altitud', 'usuario.nombre');
 

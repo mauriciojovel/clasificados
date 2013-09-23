@@ -2,20 +2,19 @@
 <resources>
 
     <string name="app_name">Guana Anuncios</string>
-    <string name="title_activity_anuncio">AnuncioActivity</string>
+    <string name="title_activity_anuncio"></string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_login">Inicio sesion</string>
     <string name="losginUsuario">Usuario</string>
-    <string name="losginPass">Contraseña</string>
+    <string name="losginPass">Clave</string>
     <string name="btnLogin">Entrar</string>
     <string name="btnRegistrar">Registrar</string>
     <string name="regNombre">Nombre completo</string>
     <string name="regCorreo">Correo electrónico</string>
-    <string name="regPass">Contraseña</string>
+    <string name="regPass">Clave</string>
     <string name="regAlias">Alias</string>
     <string name="btnCancelar">Cancelar</string>
-    <string name="title_activity_registro">RegistroActivity</string>
+    <string name="title_activity_registro">Registro</string>
     <string name="title_activity_publicar_anuncio">Publicar Anuncio</string>
     <string name="seleccion_categoria">Seleccione una categoría</string>
     <string name="descripcion_articulo">Descripción del artículo</string>
@@ -29,7 +28,7 @@
     <string name="titulo_procesando">Procesando.</string>
     <string name="titulo_espere">Por favor espere.</string>
     <string name="buscar_anuncios">Buscar anuncios</string>
-    <string name="title_activity_anuncio_detalle">AnuncioDetalleActivity</string>
+    <string name="title_activity_anuncio_detalle"></string>
     <string name="activa">Activar</string>
     <string name="desactivar">Desactivar</string>
     <string name="wifi">Wifi</string>
@@ -40,5 +39,7 @@
     <string name="titulo_recargar_anuncios">Recargar Anuncios</string>
     <string name="titulo_buscar_anuncios">Buscar Anuncios</string>
     <string name="eliminar_detalle">Eliminar</string>
+    <string name="mis_anuncios">Mis anuncios</string>
+    <string name="todos_anuncios">Todos anuncios</string>
 
 </resources>
