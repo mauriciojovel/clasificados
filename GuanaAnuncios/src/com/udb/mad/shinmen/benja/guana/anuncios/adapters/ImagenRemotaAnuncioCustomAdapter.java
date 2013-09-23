@@ -46,6 +46,8 @@ public class ImagenRemotaAnuncioCustomAdapter extends ArrayAdapter<String> {
         ImageView view = (ImageView) vi.findViewById(R.id.imgDetalleAnuncio);
  
         String codigoImagen = getItem(position);
+        
+        vi.setTag(codigoImagen);
 
         String url = vi.getResources().getString(R.string.descargarImagenAnuncioService);
         url = url.replace("{id}", String.valueOf(codigoImagen));

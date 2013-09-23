@@ -1,11 +1,13 @@
 package com.udb.mad.shinmen.benja.guana.anuncios;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnuncioDetalleFragment;
 
@@ -15,23 +17,22 @@ public class AnuncioDetalleActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.simple_empty_layout);
-		if(savedInstanceState == null) {
+		if (savedInstanceState == null) {
 			AnuncioDetalleFragment f = new AnuncioDetalleFragment();
 			f.setArguments(getIntent().getExtras());
-			FragmentTransaction ft = 
-					getSupportFragmentManager().beginTransaction();
-			ft.add(
-					android.R.id.empty, f);
+			FragmentTransaction ft = getSupportFragmentManager()
+					.beginTransaction();
+			ft.add(android.R.id.empty, f);
 			ft.commit();
 			setupActionBar();
 		}
 	}
-	
+
 	private void setupActionBar() {
-	    ActionBar actionBar = getSupportActionBar();
-	    actionBar.setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -42,10 +43,17 @@ public class AnuncioDetalleActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/*@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.anuncio_detalle, menu);
-		return true;
-	}*/
+	public void mostrarImagen(View v) {
+
+		String codigoImagen = (String) v.getTag();
+		Intent intent = new Intent(this, AnuncioImagenActivity.class);
+		intent.putExtra(AnuncioImagenActivity.CODIGO_IMAGEN, codigoImagen);
+		startActivity(intent);
+	}
+
+	/*
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) {
+	 * getMenuInflater().inflate(R.menu.anuncio_detalle, menu); return true; }
+	 */
 
 }

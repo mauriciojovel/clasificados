@@ -77,10 +77,11 @@
             android:text="-" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lvImagenesDetalle"
+    <GridView
+        android:id="@+id/gvImagenesDetalle"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:numColumns="auto_fit" >
+    </GridView>
 
 </LinearLayout>

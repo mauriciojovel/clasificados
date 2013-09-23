@@ -5,4 +5,5 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
-    android:src="@drawable/guana_logo" />
+    android:src="@drawable/guana_logo"
+    android:onClick="mostrarImagen" />
