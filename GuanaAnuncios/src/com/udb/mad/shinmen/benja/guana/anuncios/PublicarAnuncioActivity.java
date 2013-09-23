@@ -143,6 +143,11 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 			}
 		}
 	}
+	
+	public void removerImagen(View v){
+		adapter.remove((String) v.getTag());
+		adapter.notifyDataSetChanged();
+	}
 
 	private void guardarAnuncio() {
 		
