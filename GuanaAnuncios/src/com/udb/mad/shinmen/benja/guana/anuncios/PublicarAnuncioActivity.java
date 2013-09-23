@@ -171,7 +171,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 		anuncio.setCategoriaId(categoriaSeleccionada);
 		anuncio.setPrecio(this.edtPrecio.getText().toString());
 		anuncio.setTelefono(this.edtTelefono.getText().toString());
-		anuncio.setLatitud(UbicacionUtility.getLongitud(activity));
+		anuncio.setLatitud(UbicacionUtility.getLatitud(activity));
 		anuncio.setAltitud(UbicacionUtility.getAltitud(activity));
 		
 		Intent intent = new Intent(this, PublicarAnuncioService.class);
