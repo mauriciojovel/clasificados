@@ -17,6 +17,15 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
     
+    <style name="bigBoldtext">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="boldText">
+        <item name="android:textStyle">bold</item>
+    </style>
+    
     <!-- Login buttons theme. -->
     <style name="button_text">
         <item name="android:layout_width">fill_parent</item>
