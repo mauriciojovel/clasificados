@@ -2,22 +2,23 @@ package com.udb.mad.shinmen.benja.guana.anuncios.utilidades;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
-import com.udb.mad.shinmen.benja.guana.anuncios.R;
-
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
 public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+	
 	private final WeakReference<ImageView> imageViewReference;
+	static int reqWidth = 100; 
+	static int reqHeight = 100;
 
 	public ImageDownloaderTask(ImageView imageView) {
 		imageViewReference = new WeakReference<ImageView>(imageView);
@@ -67,8 +68,7 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 				InputStream inputStream = null;
 				try {
 					inputStream = entity.getContent();
-					final Bitmap bitmap = 
-										BitmapFactory.decodeStream(inputStream);
+					final Bitmap bitmap = Imagen.decodeSampledBitmap(inputStream, reqWidth, reqHeight);
 					return bitmap;
 				} finally {
 					if (inputStream != null) {

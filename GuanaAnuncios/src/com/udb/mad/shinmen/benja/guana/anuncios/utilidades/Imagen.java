@@ -1,6 +1,9 @@
 package com.udb.mad.shinmen.benja.guana.anuncios.utilidades;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,6 +53,55 @@ public class Imagen {
         resizedBitmap = Bitmap.createScaledBitmap(bm, width, height, true);
         return resizedBitmap;
     }
+    
+   public static Bitmap decodeSampledBitmap(InputStream is,
+            int reqWidth, int reqHeight) {
+
+	   	Bitmap result = null;
+	   	
+	   	BufferedInputStream stream = new BufferedInputStream(is);
+	   
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(stream, null, options);
+
+        try {
+        	if(stream.markSupported()){
+        		stream.reset();
+        	}
+			options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+	        // Decode bitmap with inSampleSize set
+	        options.inJustDecodeBounds = false;
+	        result = BitmapFactory.decodeStream(stream, null, options);
+		} catch (IOException e) {
+			Log.e("Compresion Imagenes", e.getMessage());
+		}
+        
+        return result;
+    }
+    
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    // Raw height and width of image
+    final int height = options.outHeight;
+    final int width = options.outWidth;
+    int inSampleSize = 1;
+
+    if (height > reqHeight || width > reqWidth) {
+
+        // Calculate ratios of height and width to requested height and width
+        final int heightRatio = Math.round((float) height / (float) reqHeight);
+        final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+        // Choose the smallest ratio as inSampleSize value, this will guarantee
+        // a final image with both dimensions larger than or equal to the
+        // requested height and width.
+        inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+    }
+
+    return inSampleSize;
+}
     
     @Deprecated
     public static Bitmap decodeToLowResImage(byte [] b, int width, int height) {
