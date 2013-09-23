@@ -25,8 +25,15 @@ class ImagenController extends AutheticatedController {
 
     public function getList($id) {
         try {
-            $image = Imagen::where('anuncio_id','=',$id)->select('id')->get();
-            return Response::json(array('estado'=>'1', 'imagenes'=>$imagen));
+            $imagen = Imagen::where('anuncio_id','=',$id)->get();
+            $datos = array();
+            /*$queries = DB::getQueryLog();
+            $last_query = end($queries);*/
+            $i = 0;
+            foreach ($imagen as $key => $value) {
+                $datos[$i++] = $value->id;
+            }
+            return Response::json(array('estado'=>'1', 'imagenes'=>$datos/*, 'query'=>$last_query*/));
         } catch(Exception $e){
             return Response::json(array('estado'=>0, 'error'=>$e->getMessage()));
         }
