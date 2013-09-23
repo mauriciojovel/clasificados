@@ -9,39 +9,62 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/connectionDialog" />
+        android:text="@string/connectionDialog"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_marginBottom="25dp" >
 
-            <Switch
-                android:id="@+id/swWifi"
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wifi"
-                android:textOff="@string/desactivar"
-                android:textOn="@string/activa" />
+                android:layout_gravity="center_horizontal" />
+
+            <ToggleButton
+                android:id="@+id/togWifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ToggleButton"
+                android:textOff="@string/activa"
+                android:textOn="@string/desactivar"
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_weight="1" >
 
-            <Switch
-                android:id="@+id/sw3g"
+            <TextView
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tresGe"
-                android:textOff="@string/desactivar"
-                android:textOn="@string/activa" />
+                android:layout_gravity="center_horizontal" />
+
+            <ToggleButton
+                android:id="@+id/tog3g"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ToggleButton"
+                android:textOff="@string/activa"
+                android:textOn="@string/desactivar"
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
 

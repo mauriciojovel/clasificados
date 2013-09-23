@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -30,6 +32,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnunciosCercanosCustomAdapter;
 import com.udb.mad.shinmen.benja.guana.anuncios.adapters.GestionAnunciosImpl;
+import com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnuncioDetalleFragment;
+import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 
 public class AnunciosCercanosActivity extends ActionBarActivity implements
 		OnItemClickListener, ConnectionCallbacks, OnConnectionFailedListener,
@@ -37,6 +41,9 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 
 	public static final String TOKEN = "token";
 	public static final String USUARIO = "usuario";
+	
+	static final String ANUNCIO_DETAIL = "com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnuncioDetalleFragment.ANUNCIO_DETAIL";
+	static final String DUAL_PANE = "com.udb.mad.shinmen.benja.guana.anuncios.fragment.PersonajeDetailFragment.DUAL_PANE";
 
 	private int page = 0;
 	private int limit = 5;
@@ -161,9 +168,27 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	public void onItemClick(AdapterView<?> listview, View view, int position, long id) {
 		// TODO Auto-generated method stub
-
+		
+		HashMap<String, Object> item = (HashMap<String, Object>) listview.getItemAtPosition(position);
+		
+		Anuncio anuncio = new Anuncio();
+		anuncio.setCodigoAnuncio(item.get("codigo").toString());
+		anuncio.setTituloAnuncio(item.get("titulo").toString());
+		anuncio.setDescripcionAnuncio(item.get("descripcion").toString());
+		anuncio.setPrecio(item.get("precio").toString());
+		anuncio.setTelefono(item.get("telefono").toString());
+		anuncio.setUsuario(item.get("usuario").toString());
+		anuncio.setLatitud(Double.valueOf(item.get("latitud").toString()));
+		anuncio.setAltitud(Double.valueOf(item.get("altitud").toString()));
+		
+		Intent i = new Intent();
+		i.setClass(this, AnuncioDetalleActivity.class);
+		i.putExtra(ANUNCIO_DETAIL, anuncio);
+		i.putExtra(DUAL_PANE, false);
+		startActivity(i);
+		
 	}
 
 	@Override

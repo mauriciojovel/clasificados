@@ -41,5 +41,6 @@
     <string name="eliminar_detalle">Eliminar</string>
     <string name="mis_anuncios">Mis anuncios</string>
     <string name="todos_anuncios">Todos anuncios</string>
+    <string name="titulo_widget">GuanAnuncios</string>
 
 </resources>

@@ -25,14 +25,17 @@ import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 public class GestionAnunciosImpl implements GestionAnuncios,
 		JSONDownloaderTask.OnFinishDownload<JSONArray> {
 
-	public static final String LATITUD = "latitud";
-	public static final String ALTITUD = "altitud";
-	public static final String TOKEN = "token";
-	public static final String USUARIO = "usuario";
-	public static final String TITULO = "titulo";
-	public static final String DESCRIPCION = "descripcion";
-	public static final String CODIGO = "codigo";
-	public static final String ID = "id";
+    public static final String LATITUD = "latitud";
+    public static final String ALTITUD = "altitud";
+    public static final String TOKEN = "token";
+    public static final String USUARIO = "usuario";
+    public static final String TITULO = "titulo";
+    public static final String DESCRIPCION = "descripcion";
+    public static final String CODIGO = "codigo";
+    public static final String ID = "id";
+    public static final String TELEFONO = "telefono";
+    public static final String PRECIO = "precio";
+    public static final String NOMBRE = "nombre";
 
 	private JSONDownloaderTask<JSONArray> jsonTask;
 	private AnunciosCercanosActivity activity;
@@ -73,48 +76,6 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 		
 		ArrayList<HashMap<String, Object>> anunciosList = new ArrayList<HashMap<String, Object>>();
 
-		/*
-		 * Dummy data* HashMap<String, Object> anuncio = new HashMap<String,
-		 * Object>(); anuncio.put("titulo", "Mouse inalambrico");
-		 * anuncio.put("alias", "malaCara1"); anuncio.put("descripcion",
-		 * "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
-		 * ); anuncio.put("imagen", ""); anuncio.put("latitud",
-		 * "13.690340434877442"); anuncio.put("longitud", "-89.22508481559748");
-		 * anunciosList.add(anuncio);
-		 * 
-		 * anuncio = new HashMap<String, Object>(); anuncio.put("titulo",
-		 * "Galaxy S5"); anuncio.put("alias", "ratero01");
-		 * anuncio.put("descripcion",
-		 * "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
-		 * ); anuncio.put("imagen", ""); anuncio.put("latitud",
-		 * "13.690903331255466"); anuncio.put("longitud", "-89.2275739055633");
-		 * anunciosList.add(anuncio);
-		 * 
-		 * anuncio = new HashMap<String, Object>(); anuncio.put("titulo",
-		 * "Adaptadores USB"); anuncio.put("alias", "timorato");
-		 * anuncio.put("descripcion",
-		 * "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
-		 * ); anuncio.put("imagen", ""); anuncio.put("latitud",
-		 * "13.687817808638007"); anuncio.put("longitud", "-89.22544959602351");
-		 * anunciosList.add(anuncio);
-		 * 
-		 * anuncio = new HashMap<String, Object>(); anuncio.put("titulo",
-		 * "Tarjetas de red"); anuncio.put("alias", "cachada");
-		 * anuncio.put("descripcion",
-		 * "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
-		 * ); anuncio.put("imagen", ""); anuncio.put("latitud",
-		 * "13.689172941798928"); anuncio.put("longitud", "-89.2257714611053");
-		 * anunciosList.add(anuncio);
-		 * 
-		 * anuncio = new HashMap<String, Object>(); anuncio.put("titulo",
-		 * "Monitor LED"); anuncio.put("alias", "descuentazo");
-		 * anuncio.put("descripcion",
-		 * "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
-		 * ); anuncio.put("imagen", ""); anuncio.put("latitud",
-		 * "13.684419517304311"); anuncio.put("longitud", "-89.22313216743464");
-		 * anunciosList.add(anuncio);
-		 */
-
 		return anunciosList;
 	}
 
@@ -138,6 +99,9 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 				anuncio.put(CODIGO, jsonObject.getString(ID));
 				anuncio.put(LATITUD, jsonObject.getString(LATITUD));
 				anuncio.put(ALTITUD, jsonObject.getString(ALTITUD));
+				anuncio.put(TELEFONO, jsonObject.getString(TELEFONO));
+                anuncio.put(PRECIO, jsonObject.getString(PRECIO));
+                anuncio.put(USUARIO, jsonObject.getString(NOMBRE));
 				
 				String url = activity.getResources()
 						.getString(R.string.imagenAnuncioService);//activity.findViewById(R.string.imagenAnuncioService).toString();

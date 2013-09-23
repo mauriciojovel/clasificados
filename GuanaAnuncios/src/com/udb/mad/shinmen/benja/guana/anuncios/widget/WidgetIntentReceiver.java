@@ -14,7 +14,7 @@ import com.udb.mad.shinmen.benja.guana.anuncios.R;
 
 public class WidgetIntentReceiver extends BroadcastReceiver {
 
-	private static int position = 19;
+	public static int position = 19;
 	ArrayList<HashMap<String, Object>> anunciosList;
 	Context ctx;
 
@@ -25,27 +25,18 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
 		anunciosList = (ArrayList<HashMap<String, Object>>) intent
 				.getSerializableExtra("anunciosList");
-		Log.e("GuanaAnuncio", "onReceive method, position = " + position);
-		Log.e("GuanaAnuncio", "onReceive method, anunciosList.size = "
-				+ anunciosList.size());
-
+		
 		if (position > anunciosList.size()) {
 			position = anunciosList.size() - 1;
-			Log.e("GuanaAnuncio", "onReceive method, position = " + position);
 		}
-
-		Log.e("GuanaAnuncio",
-				"onReceive method, action = " + intent.getAction());
+		Log.e("GuanaAnuncios", "Action="+intent.getAction());
 		if (intent
 				.getAction()
 				.equals("com.udb.mad.shinmen.benja.guana.anuncios.CAMBIAR_ANUNCIO_LEFT")) {
-			Log.e("GuanaAnuncio", "onReceive method, entra al LEFT");
-			Log.e("GuanaAnuncio", "onReceive method, position = " + position);
-			Log.e("GuanaAnuncio", "onReceive method, anunciosList.size = "
-					+ anunciosList.size());
+			
 			if (anunciosList != null && position <= anunciosList.size()) {
 				position++;
-				if (position > anunciosList.size()) {
+				if (position >= anunciosList.size()) {
 					position = anunciosList.size() - 1;
 				}
 				updateWidgetPictureAndButtonListener(context, position);
@@ -55,10 +46,6 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 				.getAction()
 				.equals("com.udb.mad.shinmen.benja.guana.anuncios.CAMBIAR_ANUNCIO_RIGHT")) {
 
-			Log.e("GuanaAnuncio", "onReceive method, entra al RIGHT");
-			Log.e("GuanaAnuncio", "onReceive method, position = " + position);
-			Log.e("GuanaAnuncio", "onReceive method, anunciosList.size = "
-					+ anunciosList.size());
 			if (position >= 1) {
 				if (anunciosList != null && anunciosList.size() >= 1) {
 					position--;
@@ -66,34 +53,31 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 				}
 			}
 
-		}else{
+		} else{
 			updateWidgetPictureAndButtonListener(context, position);
 		}
 	}
 
 	private void updateWidgetPictureAndButtonListener(Context context,
 			int position) {
-
-		Log.e("GuanaAnuncio", "updateWidgetPictureAndButtonListener method");
+		
 		if (anunciosList != null && anunciosList.size() > 0) {
 
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 					R.layout.widget_layout);
 
 			HashMap<String, Object> anuncio = anunciosList.get(position);
-
-			Log.e("GuanaAnuncio",
-					"updateWidgetPictureAndButtonListener method, titulo = "
-							+ anuncio.get("titulo").toString());
+			
 			String titulo = anuncio.get("titulo").toString();
 			String descripcion = anuncio.get("descripcion").toString();
+			String codigo = anuncio.get("codigo").toString();
 
 			remoteViews.setTextViewText(R.id.wgTitulo, titulo);
 			remoteViews.setTextViewText(R.id.wgDescripcion, descripcion);
+			remoteViews.setTextViewText(R.id.codigoAnuncio, codigo);
 			remoteViews.setViewVisibility(R.id.wgTitulo, View.VISIBLE);
 			remoteViews.setViewVisibility(R.id.wgDescripcion, View.VISIBLE);
 			remoteViews.setViewVisibility(R.id.wgProgress, View.INVISIBLE);		
-			
 
 			// REMEMBER TO ALWAYS REFRESH YOUR BUTTON CLICK LISTENERS!!!
 			remoteViews.setOnClickPendingIntent(R.id.leftArrow,
@@ -103,7 +87,12 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 			remoteViews.setOnClickPendingIntent(R.id.rightArrow,
 					GuanaAnuncioWidget.buildRightButtonPendingIntent(context,
 							anunciosList));
-
+			
+			Log.e("GuanaAnuncios","Listener, position="+position);
+			remoteViews.setOnClickPendingIntent(R.id.wgDescripcion,
+					GuanaAnuncioWidget.buildDetalleAnuncioPendingIntent(context,
+							anunciosList,position));
+			
 			GuanaAnuncioWidget.pushWidgetUpdate(
 					context.getApplicationContext(), remoteViews);      
 

@@ -58,7 +58,7 @@ public class AnunciosCercanosCustomAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi=convertView;
 		Holder h;
-		String url = vi.getResources().getString(R.string.imagenAnuncioService);
+		String url = activity.getResources().getString(R.string.imagenAnuncioService);/*vi.getResources().getString(R.string.imagenAnuncioService);*/
 		
         if(convertView==null) {
             vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);

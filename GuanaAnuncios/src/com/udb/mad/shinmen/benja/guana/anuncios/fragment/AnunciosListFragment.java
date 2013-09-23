@@ -11,8 +11,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.MenuItem;
@@ -55,8 +58,57 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		if (PreferenciasUsuario.isUsuarioAutenticado(getActivity())) {
+		boolean connected = false;
+        ConnectivityManager connectivityManager = 
+                (ConnectivityManager) getActivity()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                .getState() == android.net.NetworkInfo.State.CONNECTED
+                || connectivityManager.getNetworkInfo(
+                        ConnectivityManager.TYPE_MOBILE).getState() 
+                        == android.net.NetworkInfo.State.CONNECTING
+                || connectivityManager.getNetworkInfo(
+                        ConnectivityManager.TYPE_WIFI).getState() 
+                        == android.net.NetworkInfo.State.CONNECTED
+                || connectivityManager.getNetworkInfo(
+                        ConnectivityManager.TYPE_WIFI).getState() 
+                        == android.net.NetworkInfo.State.CONNECTING) {
+            // we are connected to a network
+
+            connected = true;
+        } else {
+            connected = false;
+        }
+        if (connected) {
+            if (PreferenciasUsuario.isUsuarioAutenticado(getActivity())) {
+                anuncios = new ArrayList<Anuncio>();
+                token = PreferenciasUsuario.getToken(getActivity());
+                usuario = PreferenciasUsuario.getUsuario(getActivity());
+
+                if (adapter == null) {
+                    adapter = new AnuncioCustomAdapter(getActivity());
+                }
+                setListAdapter(adapter);
+                scrollListener = new EndlessScrollListener(
+                        new onScrollEndListener() {
+                            @Override
+                            public void onEnd(int page) {
+                                cargarAnuncios(page);
+                            }
+                        });
+                getListView().setOnScrollListener(scrollListener);
+                setListShownNoAnimation(false);
+                handleIntent(getActivity().getIntent());
+                setHasOptionsMenu(true);
+            } else {
+                // Se tiene que levantar la actividad de login y finalizar esta
+                // actividad.
+                showLogin();
+            }
+        } else {
+            showEditDialog();
+        }
+		/*if (PreferenciasUsuario.isUsuarioAutenticado(getActivity())) {
 			anuncios = new ArrayList<Anuncio>();
 			token = PreferenciasUsuario.getToken(getActivity());
 			usuario = PreferenciasUsuario.getUsuario(getActivity());
@@ -80,8 +132,14 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 			// Se tiene que levantar la actividad de login y finalizar esta
 			// actividad.
 			showLogin();
-		}
+		}*/
 	}
+	
+	private void showEditDialog() {
+        FragmentManager fm = getFragmentManager();
+        ConexionDialogFragment dialog = new ConexionDialogFragment();
+        dialog.show(fm, "conexion_dialog_fragment");
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

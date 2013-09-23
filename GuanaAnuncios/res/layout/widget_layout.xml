@@ -23,7 +23,7 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GuanaAnuncios Widget!"
+            android:text="@string/titulo_widget"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:textColor="#ffffff" />
@@ -87,6 +87,12 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_height="wrap_content" />
+            
+            <TextView
+                android:id="@+id/codigoAnuncio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

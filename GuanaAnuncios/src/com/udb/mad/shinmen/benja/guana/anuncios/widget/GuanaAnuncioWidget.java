@@ -20,7 +20,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioDetalleActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
+import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
 
 public class GuanaAnuncioWidget extends AppWidgetProvider {
@@ -29,6 +31,8 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 	Context ctx;
 	RemoteViews remoteViews;
 	private JSONDownloaderTask<JSONArray> jsonTask;
+	static final String ANUNCIO_DETAIL = "com.udb.mad.shinmen.benja.guana.anuncios.fragment.AnuncioDetalleFragment.ANUNCIO_DETAIL";
+	static final String DUAL_PANE = "com.udb.mad.shinmen.benja.guana.anuncios.fragment.PersonajeDetailFragment.DUAL_PANE";
 
 	String PAGE_MARK = "{page}";
 	String LIMIT_MARK = "{limit}";
@@ -38,17 +42,10 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		
 		this.ctx = context;
-		Log.e("GuanaAnuncio", "onUpdate method");
 		
 		remoteViews = new RemoteViews(context.getPackageName(),
 				R.layout.widget_layout);
-		
-		if(anunciosList!=null){
-			Log.e("GuanaAnuncio", "onUpdate method, anunciosList.size = " + anunciosList.size());
-		}else{
-			Log.e("GuanaAnuncio", "onUpdate method, anunciosList.size = null");
-		}
-		
+				
 		remoteViews.setViewVisibility(R.id.wgTitulo, View.INVISIBLE);
 		remoteViews.setViewVisibility(R.id.wgDescripcion, View.INVISIBLE);
 		remoteViews.setViewVisibility(R.id.wgProgress, View.VISIBLE);
@@ -57,7 +54,7 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 		
 		cargarData();
 		
-
+		
 	}
 
 	public static PendingIntent buildLeftButtonPendingIntent(Context context, ArrayList<HashMap<String, Object>> anunciosList) {
@@ -75,7 +72,32 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 		return PendingIntent.getBroadcast(context, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 	}
-
+	
+	public static PendingIntent buildDetalleAnuncioPendingIntent(Context ctx, ArrayList<HashMap<String, Object>> anunciosList,int position) {
+		Intent intent = new Intent(ctx, AnuncioDetalleActivity.class);
+		
+		Log.e("GuanaAnuncios","Building pendin intent, position="+position);
+		intent.putExtra(DUAL_PANE, false);
+		
+		if(position>=anunciosList.size()) position = anunciosList.size() - 1;
+		
+		HashMap<String, Object> item = anunciosList.get(position);
+		
+		Anuncio anuncio = new Anuncio();
+		anuncio.setCodigoAnuncio(item.get("codigo").toString());
+		anuncio.setTituloAnuncio(item.get("titulo").toString());
+		anuncio.setDescripcionAnuncio(item.get("descripcion").toString());
+		anuncio.setPrecio(item.get("precio").toString());
+		anuncio.setTelefono(item.get("telefono").toString());
+		anuncio.setUsuario(item.get("usuario").toString());
+		anuncio.setLatitud(Double.valueOf(item.get("latitud").toString()));
+		anuncio.setAltitud(Double.valueOf(item.get("altitud").toString()));
+        
+		intent.putExtra(ANUNCIO_DETAIL, anuncio);
+		
+		return PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	}
+		
 	public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {
 		ComponentName myWidget = new ComponentName(context,
 				GuanaAnuncioWidget.class);
@@ -86,14 +108,10 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 
 	private void cargarData() {
 		
-		Log.e("GuanaAnuncio", "cargarData method");
 		SharedPreferences prefs = ctx.getSharedPreferences(
 				"GuanaAnunciosPreferences", Context.MODE_PRIVATE);
 		String usuario = prefs.getString("usuario", "");
 		String token = prefs.getString("token", "");
-		
-		Log.e("GuanaAnuncio", "cargarData method, usuario = " + usuario);
-		Log.e("GuanaAnuncio", "cargarData method, token = " + token);
 		
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>(2);
 		parametros.add(new BasicNameValuePair("usuario", usuario));
@@ -106,8 +124,7 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 		url = url.replace(LIMIT_MARK, "20");
 
 		if (anunciosList == null || anunciosList.size() == 0) {
-			anunciosList = new ArrayList<HashMap<String, Object>>();
-			Log.e("GuanaAnuncio", "cargarData method, anunciosList == null || anunciosList.size() == 0");
+			anunciosList = new ArrayList<HashMap<String, Object>>();			
 		}
 
 		/* Tarea asincrona que recupera los datos */
@@ -118,6 +135,8 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 		jsonTask.execute();
 
 	}
+	
+	
 
 	private class BusquedaAnunciosListener implements
 			JSONDownloaderTask.OnFinishDownload<JSONArray> {
@@ -127,9 +146,7 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 			
 			Log.e("GuanaAnuncio", "onFinishDownload method");
 			try {
-				Log.e("GuanaAnuncio", "json.length = " + json.length());
 				for (int i = 0; i < json.length(); i++) {
-					Log.e("GuanaAnuncio", "length = " + i);
 					JSONObject jsonObject = json.getJSONObject(i);
 
 					HashMap<String, Object> anuncio = new HashMap<String, Object>();
@@ -137,6 +154,11 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 					anuncio.put("descripcion",
 							jsonObject.getString("descripcion"));
 					anuncio.put("codigo", jsonObject.getString("id"));
+					anuncio.put("precio", jsonObject.getString("precio"));
+					anuncio.put("telefono", jsonObject.getString("telefono"));
+					anuncio.put("usuario", jsonObject.getString("nombre"));
+					anuncio.put("latitud", jsonObject.getString("latitud"));
+					anuncio.put("altitud", jsonObject.getString("altitud"));
 					anunciosList.add(anuncio);
 				}
 			} catch (Exception e) {
@@ -147,8 +169,6 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 				
 				HashMap<String, Object> anuncio = anunciosList.get(anunciosList.size()-1);
 
-				Log.e("GuanaAnuncio",
-						"BusquedaAnunciosListener method");
 				String titulo = anuncio.get("titulo").toString();
 				String descripcion = anuncio.get("descripcion").toString();
 
@@ -166,6 +186,11 @@ public class GuanaAnuncioWidget extends AppWidgetProvider {
 			// boton flech derecha
 			remoteViews.setOnClickPendingIntent(R.id.rightArrow,
 					buildRightButtonPendingIntent(ctx, anunciosList));
+			
+			
+			remoteViews.setOnClickPendingIntent(R.id.wgDescripcion,
+					buildDetalleAnuncioPendingIntent(ctx, anunciosList, WidgetIntentReceiver.position));
+			
 			
 			pushWidgetUpdate(ctx, remoteViews);
 		}
