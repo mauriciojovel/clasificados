@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -74,7 +76,19 @@ public class AnuncioDetalleFragment extends Fragment {
 				JSONDownloaderTask.METODO_GET, parametros);
 		jdt.setOnFinishDownloadJSONObject(new ListaImagenesDownloadListener());
 		jdt.execute();
-		
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		//super.onCreateOptionsMenu(menu, inflater);
+		if(getAnuncio().getUsuario() != null) {
+			if(getAnuncio().getUsuario()
+					.equalsIgnoreCase(PreferenciasUsuario.getUsuario(activity)))
+			{
+				inflater.inflate(R.menu.anuncio_detalle, menu);
+			}
+		}
 	}
 
 	@Override

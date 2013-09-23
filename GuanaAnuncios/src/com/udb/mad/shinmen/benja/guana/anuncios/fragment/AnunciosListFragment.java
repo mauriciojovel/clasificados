@@ -153,6 +153,9 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
 					anuncio.setDescripcionAnuncio(jsonObject.getString("descripcion"));
 					anuncio.setPrecio(jsonObject.getString("precio"));
 					anuncio.setTelefono(jsonObject.getString("telefono"));
+					anuncio.setUsuario(jsonObject.getString("nombre"));
+					anuncio.setLatitud(jsonObject.getDouble("latitud"));
+					anuncio.setAltitud(jsonObject.getDouble("altitud"));
 					adapter.add(anuncio);
 				}
 			} catch (Exception e) {

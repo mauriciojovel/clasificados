@@ -35,5 +35,6 @@
     <string name="wifi">Wifi</string>
     <string name="tresGe">3G</string>
     <string name="connectionDialog">¿Activar/Desactiva conexión a internet?</string>
+    <string name="eliminar_detalle">Eliminar</string>
 
 </resources>

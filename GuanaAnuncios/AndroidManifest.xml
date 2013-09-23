@@ -66,12 +66,16 @@
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioDetalleActivity"
-            android:label="@string/title_activity_anuncio_detalle" >
+            android:label="@string/title_activity_anuncio_detalle" 
+            android:parentActivityName="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity" />
         </activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBuM-6fIu5OAn29I1AxWeLDMB4G44HrsSU" />
+            android:value="AIzaSyBiBPd2SSg3zyFnkmtB7LQVJGOkMkzbCaM" />
 
         <receiver
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.widget.GuanaAnuncioWidget"

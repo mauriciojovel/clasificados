@@ -15,6 +15,9 @@ public class Anuncio implements Serializable {
 	private String precio;
 	private String telefono;
 	private String correo;
+	private String usuario;
+	private double latitud;
+	private double altitud;
 	
 	public String getCodigoAnuncio() {
 		return codigoAnuncio;
@@ -57,6 +60,24 @@ public class Anuncio implements Serializable {
 	}
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+	public String getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	public double getLatitud() {
+		return latitud;
+	}
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
+	public double getAltitud() {
+		return altitud;
+	}
+	public void setAltitud(double altitud) {
+		this.altitud = altitud;
 	}
 	
 }
