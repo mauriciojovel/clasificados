@@ -116,18 +116,20 @@ class AnuncioController extends AutheticatedController {
                   ->orWhere('descripcion', 'like', '%'.$texto.'%');
             });
         }
-	if(isset($altitud) && $altitud != '') {
-	        $query->where('usuario.altitud','>=',$altitud-$this->rangeAltitud);
-	        $query->where('usuario.altitud','<=',$altitud+$this->rangeAltitud);
+    	if(isset($altitud) && $altitud != '') {
+    	        $query->where('anuncio.altitud','>=',$altitud-$this->rangeAltitud);
+    	        $query->where('anuncio.altitud','<=',$altitud+$this->rangeAltitud);
         }
-       	if(isset($latitud) && $latitud != '') {
-	        $query->where('usuario.latitud','>=',$latitud-$this->rangeLatitud);
-	        $query->where('usuario.latitud','<=',$latitud+$this->rangeLatitud);
-	}
-	if(isset($usuario)&&$usuario!= '') {
-		$query->where('usuario.nombre','=',$usuario);
-	}
-        $query->select('anuncio.id','anuncio.titulo', 'anuncio.descripcion', 'anuncio.fecha_creacion', 'anuncio.es_activo', 'anuncio.precio', 'anuncio.telefono', 'usuario.latitud', 'usuario.altitud', 'usuario.nombre');
+        if(isset($latitud) && $latitud != '') {
+    	        $query->where('anuncio.latitud','>=',$latitud-$this->rangeLatitud);
+    	        $query->where('anuncio.latitud','<=',$latitud+$this->rangeLatitud);
+    	}
+    	if(isset($usuario)&&$usuario!= '') {
+    		$query->where('usuario.nombre','=',$usuario);
+    	}
+        $query->select('anuncio.id','anuncio.titulo', 'anuncio.descripcion'
+            , 'anuncio.fecha_creacion', 'anuncio.es_activo', 'anuncio.precio'
+            , 'anuncio.telefono', 'anuncio.latitud', 'anuncio.altitud', 'usuario.nombre');
 
         $anuncios = $query->orderBy('anuncio.id','desc')->skip($start*$limit)->take($limit)->get();
         return Response::json($anuncios);

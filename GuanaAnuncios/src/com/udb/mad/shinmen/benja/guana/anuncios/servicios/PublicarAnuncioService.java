@@ -68,6 +68,8 @@ public class PublicarAnuncioService extends IntentService {
 		parametros.add(new BasicNameValuePair("categoria_id",anuncio.getCategoriaId()));
 		parametros.add(new BasicNameValuePair("precio", anuncio.getPrecio()));
 		parametros.add(new BasicNameValuePair("telefono", anuncio.getTelefono()));
+		parametros.add(new BasicNameValuePair("latitud", anuncio.getLatitud()+""));
+		parametros.add(new BasicNameValuePair("altitud", anuncio.getAltitud()+""));
 
 		JSONObject respuesta = postRequest(getResources().getString(R.string.guardarAnuncioService), parametros);
 		

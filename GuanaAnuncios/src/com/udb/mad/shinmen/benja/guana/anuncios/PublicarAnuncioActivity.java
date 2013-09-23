@@ -33,6 +33,7 @@ import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Categoria;
 import com.udb.mad.shinmen.benja.guana.anuncios.servicios.PublicarAnuncioService;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.UbicacionUtility;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
@@ -170,6 +171,8 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 		anuncio.setCategoriaId(categoriaSeleccionada);
 		anuncio.setPrecio(this.edtPrecio.getText().toString());
 		anuncio.setTelefono(this.edtTelefono.getText().toString());
+		anuncio.setLatitud(UbicacionUtility.getLongitud(activity));
+		anuncio.setAltitud(UbicacionUtility.getAltitud(activity));
 		
 		Intent intent = new Intent(this, PublicarAnuncioService.class);
 		intent.putExtra(PublicarAnuncioService.ANUNCIO_EXTRA, anuncio);
