@@ -26,9 +26,9 @@ public class ImagenRemotaAnuncioCustomAdapter extends ArrayAdapter<String> {
 		View vi= convertView;
         if(convertView==null) {
         	LayoutInflater inflater = activity.getLayoutInflater();
-            vi = inflater.inflate(R.layout.imagen_anuncio_list_item, null);
+            vi = inflater.inflate(R.layout.imagen_detalle_anuncio_list_item, null);
         }	
-        ImageView view = (ImageView) vi.findViewById(R.id.imagen_publicar);
+        ImageView view = (ImageView) vi.findViewById(R.id.imgDetalleAnuncio);
  
         String codigoImagen = getItem(position);
 
@@ -38,12 +38,7 @@ public class ImagenRemotaAnuncioCustomAdapter extends ArrayAdapter<String> {
 		String token = PreferenciasUsuario.getToken(activity);
 		url = url + "?usuario="+usuario+"&token="+token;
 		new ImageDownloaderTask(view).execute(url);
-		
-       /* BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        Bitmap bm = BitmapFactory.decodeFile(ruta, options);
-        view.setImageBitmap(bm);*/
-        
+		      
         return vi;
 	}
 	
