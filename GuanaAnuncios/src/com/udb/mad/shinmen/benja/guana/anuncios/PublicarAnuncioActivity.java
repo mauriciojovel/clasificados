@@ -33,6 +33,7 @@ import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.model.Categoria;
 import com.udb.mad.shinmen.benja.guana.anuncios.servicios.PublicarAnuncioService;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class PublicarAnuncioActivity extends ActionBarActivity implements
@@ -89,6 +90,18 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 				getResources().getString(R.string.categoriasService),
 				JSONDownloaderTask.METODO_POST, parametros, true);
 		jdt.setOnFinishDownload(new CategoriaDownloadListener());
+		jdt.setOnStartDownloadListener(new OnStartDownload() {
+			@Override
+			public void onStartDownload() {
+				pd = new ProgressDialog(activity);
+				pd.setTitle(getResources()
+						.getString(R.string.titulo_procesando));
+				pd.setMessage(getResources().getString(R.string.titulo_espere));
+				pd.setCancelable(false);
+				pd.setIndeterminate(true);
+				pd.show();
+			}
+		});
 		jdt.execute();
 	}
 
@@ -178,7 +191,7 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 
 		@Override
 		public void onFinishDownload(JSONArray json) {
-
+			
 			Categoria categoria;
 
 			categorias = new ArrayList<Categoria>();
@@ -201,6 +214,8 @@ public class PublicarAnuncioActivity extends ActionBarActivity implements
 			SpinnerAdapter adapter = new ArrayAdapter<Categoria>(activity,
 					android.R.layout.simple_spinner_dropdown_item, categorias);
 			spCategorias.setAdapter(adapter);
+			
+			pd.dismiss();
 		}
 
 		@Override
