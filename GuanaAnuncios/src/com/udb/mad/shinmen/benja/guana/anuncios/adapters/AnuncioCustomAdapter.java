@@ -17,6 +17,13 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
 
 	private Activity activity;
 	
+	static class Holder{
+		TextView title;
+		TextView description;
+		TextView codigo;
+		ImageView imagen;
+	}
+	
 	public AnuncioCustomAdapter(Activity activity) {
 		super(activity, R.layout.anuncios_cercanos_layout);
 		this.activity = activity;
@@ -24,21 +31,28 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View vi= convertView;
-        if(convertView==null) {
+		Holder h = null;
+		View vi= null;
+		
+        if(convertView == null) {
         	LayoutInflater inflater = activity.getLayoutInflater();
             vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);
-        }	
-        TextView title = (TextView)vi.findViewById(R.id.title);
-        TextView description = (TextView)vi.findViewById(R.id.description);
-        TextView codigo = (TextView) vi.findViewById(R.id.codigo);
-        ImageView imagen = (ImageView) vi.findViewById(R.id.list_image);
+            h = new Holder();
+            h.title = (TextView)vi.findViewById(R.id.title);
+            h.description = (TextView)vi.findViewById(R.id.description);
+            h.codigo = (TextView) vi.findViewById(R.id.codigo);
+            h.imagen = (ImageView) vi.findViewById(R.id.list_image);
+            vi.setTag(h);
+        }else{
+        	vi = convertView;
+			h = (Holder) vi.getTag();
+        }
  
         Anuncio a = (Anuncio) getItem(position);
  
-        title.setText(a.getTituloAnuncio());
-        description.setText(a.getDescripcionAnuncio());
-        codigo.setText(a.getCodigoAnuncio());
+        h.title.setText(a.getTituloAnuncio());
+        h.description.setText(a.getDescripcionAnuncio());
+        h.codigo.setText(a.getCodigoAnuncio());
         
         /*Cargando la imagen asincronamente*/
         //obteniendo la direccion URL para descargar la imagen
@@ -47,8 +61,8 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
         url = url + "?usuario="+PreferenciasUsuario.getUsuario(activity)+"&token="+PreferenciasUsuario.getToken(activity);
         
         //ejecutando la tarea asincrona
-        if(imagen != null){
-        	new ImageDownloaderTask(imagen).execute(url);
+        if(h.imagen != null){
+        	new ImageDownloaderTask(h.imagen).execute(url);
         } 
         
         return vi;
