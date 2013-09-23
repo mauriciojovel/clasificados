@@ -9,8 +9,11 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -84,7 +87,23 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 
 		// cargando la lista en el listview
 		cargarListaAnunciosCercanos(false);
+		setupActionBar();
 	}
+	
+	private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 	private void cargarListaAnunciosCercanos(boolean notifyDataSetChanged) {
 		
@@ -101,6 +120,9 @@ public class AnunciosCercanosActivity extends ActionBarActivity implements
 		if (location != null) {
 			longitud = location.getLongitude();
 			latitud = location.getLatitude();
+		} else {
+		    longitud = 0.0;
+            latitud = 0.0;
 		}
 
 		/* Obteniendo el usuario y token de las shared preferences */

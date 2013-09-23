@@ -62,7 +62,11 @@
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.AnunciosCercanosActivity"
-            android:label="@string/title_activity_anuncios_cercanos" >
+            android:label="@string/title_activity_anuncios_cercanos" 
+            android:parentActivityName="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity" />
         </activity>
         <activity
             android:name="com.udb.mad.shinmen.benja.guana.anuncios.PublicarAnuncioActivity"
