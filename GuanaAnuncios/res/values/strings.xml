@@ -42,5 +42,6 @@
     <string name="mis_anuncios">Mis anuncios</string>
     <string name="todos_anuncios">Todos anuncios</string>
     <string name="titulo_widget">GuanAnuncios</string>
+    <string name="title_activity_anuncio_imagen">AnuncioImagenActivity</string>
 
 </resources>
