@@ -2,7 +2,6 @@ package com.udb.mad.shinmen.benja.guana.anuncios.fragment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,13 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
-import com.udb.mad.shinmen.benja.guana.anuncios.adapters.AnuncioCustomAdapter;
-import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener;
-import com.udb.mad.shinmen.benja.guana.anuncios.listeners.EndlessScrollListener.onScrollEndListener;
-import com.udb.mad.shinmen.benja.guana.anuncios.model.Anuncio;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
 public class ConexionDialogFragment extends DialogFragment {
@@ -104,16 +98,19 @@ public class ConexionDialogFragment extends DialogFragment {
 			final ConnectivityManager conman = (ConnectivityManager) context
 					.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-			final Class conmanClass = Class
+			@SuppressWarnings("rawtypes")
+            final Class conmanClass = Class
 					.forName(conman.getClass().getName());
 			final Field iConnectivityManagerField = conmanClass
 					.getDeclaredField("mService");
 			iConnectivityManagerField.setAccessible(true);
 			final Object iConnectivityManager = iConnectivityManagerField
 					.get(conman);
-			final Class iConnectivityManagerClass = Class
+			@SuppressWarnings("rawtypes")
+            final Class iConnectivityManagerClass = Class
 					.forName(iConnectivityManager.getClass().getName());
-			final Method setMobileDataEnabledMethod = iConnectivityManagerClass
+			@SuppressWarnings("unchecked")
+            final Method setMobileDataEnabledMethod = iConnectivityManagerClass
 					.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
 			setMobileDataEnabledMethod.setAccessible(true);
 
