@@ -41,13 +41,7 @@
     <string name="eliminar_detalle">Eliminar</string>
     <string name="mis_anuncios">Mis anuncios</string>
     <string name="todos_anuncios">Todos anuncios</string>
-<<<<<<< HEAD
     <string name="titulo_widget">GuanAnuncios</string>
     <string name="title_activity_anuncio_imagen">AnuncioImagenActivity</string>
 
 </resources>
-=======
-    <string name="title_activity_anuncio_imagen">AnuncioImagenActivity</string>
-
-</resources>
->>>>>>> f47ddb553acc82cb65d41e0bb2e234a8e9069390
