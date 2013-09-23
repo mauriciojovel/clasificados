@@ -3,13 +3,13 @@
     
     <item
         android:id="@+id/action_refrescar"
-        android:title="@string/title_activity_publicar_anuncio"
-        app:showAsAction="always" 
+        android:title="@string/titulo_recargar_anuncios"
+        app:showAsAction="ifRoom" 
         android:icon="@drawable/ic_action_refresh"/>
     <item
         android:id="@+id/action_location"
-        android:title="@string/title_activity_publicar_anuncio"
-        app:showAsAction="always" 
+        android:title="@string/title_activity_anuncios_cercanos"
+        app:showAsAction="ifRoom" 
         android:icon="@drawable/ic_action_location"/>
     <item
         android:id="@+id/action_nuevo_anuncio"
@@ -19,8 +19,8 @@
     
     <item 
         android:id="@+id/action_buscar"
-        android:title="@string/title_activity_publicar_anuncio"
-        app:showAsAction="always"
+        android:title="@string/titulo_buscar_anuncios"
+        app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/ic_search" />
 
