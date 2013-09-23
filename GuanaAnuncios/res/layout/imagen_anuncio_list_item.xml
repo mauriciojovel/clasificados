@@ -7,16 +7,15 @@
             android:id="@+id/imagen_publicar"
             android:layout_width="100dip"
             android:layout_height="100dip"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/guana_logo"
-             />
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/guana_logo" />
 
         <ImageButton
             android:id="@+id/btnBorrarImagen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_discard_image"
+            android:layout_gravity="center_vertical"
             android:onClick="removerImagen"
-             />
+            android:src="@drawable/ic_discard_image" />
 
 </LinearLayout>
