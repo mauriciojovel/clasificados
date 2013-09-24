@@ -185,23 +185,26 @@ public class GestionAnunciosImpl implements GestionAnuncios,
 
             }
         }
-
-        LocationManager lm = (LocationManager) activity
-                .getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        // Circulo que representa el area de auncios visibles
-        CircleOptions circleArea = new CircleOptions();
-        lat = location.getLatitude();
-        lon = location.getLongitude();
-        Log.e("GuanaAnuncios", "Latitud=" + lat);
-        Log.e("GuanaAnuncios", "Longitud=" + lon);
-        circleArea.center(new LatLng(lat, lon));
-        circleArea.fillColor(0x3381F781);
-        circleArea.radius(1000);
-        circleArea.strokeWidth(1);
-        mMap.addCircle(circleArea);
+        try {
+	        LocationManager lm = (LocationManager) activity
+	                .getSystemService(Context.LOCATION_SERVICE);
+	        Location location = lm
+	                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+	        lat = location.getLatitude();
+	        lon = location.getLongitude();
+	     // Circulo que representa el area de auncios visibles
+	        CircleOptions circleArea = new CircleOptions();
+	        
+	        Log.e("GuanaAnuncios", "Latitud=" + lat);
+	        Log.e("GuanaAnuncios", "Longitud=" + lon);
+	        circleArea.center(new LatLng(lat, lon));
+	        circleArea.fillColor(0x3381F781);
+	        circleArea.radius(1000);
+	        circleArea.strokeWidth(1);
+	        mMap.addCircle(circleArea);
+        } catch(Exception e) {
+        	Log.e("GestionAnuncioImpl", "No se pudo obtener la ubicacion actual", e);
+        }
 
         /* para indicar que ya se cargo la data en el listview */
         activity.flag_loading = false;
