@@ -10,6 +10,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.RegistroActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
@@ -52,6 +54,7 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 	private JSONDownloaderTask<JSONObject> jsonTaskObj;
 	//private SharedPreferences prefs;
 	private String usuario;
+	ProgressDialog pd;
 
 	public GestionUsuariosImpl(RegistroActivity activity) {
 		super();
@@ -105,6 +108,18 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 		jsonTask = new JSONDownloaderTask<JSONArray>(url,
 				JSONDownloaderTask.METODO_GET, null);
 		jsonTask.setOnFinishDownload(this);
+		jsonTask.setOnStartDownloadListener(new OnStartDownload() {
+			@Override
+			public void onStartDownload() {
+				pd = new ProgressDialog(activity);
+				pd.setTitle(activity.getResources()
+						.getString(R.string.titulo_procesando));
+				pd.setMessage(activity.getResources().getString(R.string.titulo_espere));
+				pd.setCancelable(false);
+				pd.setIndeterminate(true);
+				pd.show();
+			}
+		});
 		jsonTask.setJsonArray(true);
 		jsonTask.execute();
 	}
@@ -159,6 +174,8 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 			if (position != 0) {
 				spnPaises.setSelection(position);
 			}
+			
+			pd.dismiss();
 
 		} catch (Exception e) {
 			Log.e("GestionUsuarios", e.getMessage(), e);
