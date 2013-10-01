@@ -40,6 +40,7 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 /**
@@ -105,6 +106,7 @@ public class ImageDownloader {
         // State sanity: url is guaranteed to never be null in DownloadedDrawable and cache keys.
         if (url == null) {
             imageView.setImageDrawable(null);
+            imageView.setVisibility(View.GONE);
             return;
         }
 
@@ -114,6 +116,11 @@ public class ImageDownloader {
                     Bitmap bitmap = downloadBitmap(url);
                     addBitmapToCache(url, bitmap);
                     imageView.setImageBitmap(bitmap);
+                    if(bitmap == null) {
+                        imageView.setVisibility(View.GONE);
+                    } else {
+                        imageView.setVisibility(View.VISIBLE);
+                    }
                     break;
 
                 case NO_DOWNLOADED_DRAWABLE:
@@ -285,6 +292,11 @@ public class ImageDownloader {
                 // Or if we don't use any bitmap to task association (NO_DOWNLOADED_DRAWABLE mode)
                 if ((this == bitmapDownloaderTask) || (mode != Mode.CORRECT)) {
                     imageView.setImageBitmap(bitmap);
+                    if(bitmap == null) {
+                        imageView.setVisibility(View.GONE);
+                    } else {
+                        imageView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }

@@ -34,7 +34,7 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <!-- item name="android:layout_margin">3dp</item-->
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1</item>
@@ -43,6 +43,29 @@
         <item name="android:layout_marginTop">25dp</item>
         <item name="android:layout_marginLeft">30dp</item>
         <item name="android:layout_marginRight">30dp</item>
+    </style>
+    
+    <style name="CardTextContent">
+        <item name="android:maxLines">4</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lineSpacingExtra">@dimen/card_space_interline</item>
+    </style>
+    <style name="CardTextTitle">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="CardImage">
+        <item name="android:padding">@dimen/card_image_padding</item>
+        <item name="android:scaleType">matrix</item>
+        <item name="android:layout_width">@dimen/card_image_preview_width</item>
+        <item name="android:layout_height">@dimen/card_image_preview_height</item>
+    </style>
+    <style name="CardRuler">
+        <item name="android:layout_height">@dimen/card_ruler_height</item>
+        <item name="android:background">@color/card_shadow</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">@dimen/card_ruler_margin</item>
+        <item name="android:layout_marginBottom">@dimen/card_ruler_margin</item>
     </style>
 
 </resources>

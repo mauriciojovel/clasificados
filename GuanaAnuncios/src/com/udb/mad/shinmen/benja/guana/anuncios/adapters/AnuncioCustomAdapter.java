@@ -39,12 +39,12 @@ public class AnuncioCustomAdapter extends ArrayAdapter<Anuncio> {
 		
         if(convertView == null) {
         	LayoutInflater inflater = activity.getLayoutInflater();
-            vi = inflater.inflate(R.layout.anuncios_cercanos_layout, null);
+            vi = inflater.inflate(R.layout.card_row_layout, null);
             h = new Holder();
-            h.title = (TextView)vi.findViewById(R.id.title);
-            h.description = (TextView)vi.findViewById(R.id.description);
-            h.codigo = (TextView) vi.findViewById(R.id.codigo);
-            h.imagen = (ImageView) vi.findViewById(R.id.list_image);
+            h.title = (TextView)vi.findViewById(R.id.cardTitulo);
+            h.description = (TextView)vi.findViewById(R.id.cardDetalle);
+            h.codigo = (TextView) vi.findViewById(R.id.cardCodigo);
+            h.imagen = (ImageView) vi.findViewById(R.id.cardImagenPreview);
             vi.setTag(h);
         }else{
         	vi = convertView;

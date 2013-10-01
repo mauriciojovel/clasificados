@@ -62,11 +62,14 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
         ConnectivityManager connectivityManager = 
                 (ConnectivityManager) getActivity()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-                .getState() == android.net.NetworkInfo.State.CONNECTED
-                || connectivityManager.getNetworkInfo(
+        if ((connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)!= null 
+                &&connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                .getState() == android.net.NetworkInfo.State.CONNECTED)
+                || (connectivityManager.getNetworkInfo(
+                        ConnectivityManager.TYPE_MOBILE) != null && 
+                        connectivityManager.getNetworkInfo(
                         ConnectivityManager.TYPE_MOBILE).getState() 
-                        == android.net.NetworkInfo.State.CONNECTING
+                        == android.net.NetworkInfo.State.CONNECTING)
                 || connectivityManager.getNetworkInfo(
                         ConnectivityManager.TYPE_WIFI).getState() 
                         == android.net.NetworkInfo.State.CONNECTED

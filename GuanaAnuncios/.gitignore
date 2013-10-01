@@ -15,4 +15,4 @@ gen
 #eclipse files
 .metadata
 .settings
-project.properties
+#project.properties
