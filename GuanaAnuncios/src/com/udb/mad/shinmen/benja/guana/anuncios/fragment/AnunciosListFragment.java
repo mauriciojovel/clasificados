@@ -100,6 +100,7 @@ public class AnunciosListFragment extends ListFragment implements Serializable {
                             }
                         });
                 getListView().setOnScrollListener(scrollListener);
+                getListView().setDividerHeight(0);
                 setListShownNoAnimation(false);
                 handleIntent(getActivity().getIntent());
                 setHasOptionsMenu(true);

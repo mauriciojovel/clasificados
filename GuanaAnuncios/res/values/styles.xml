@@ -3,8 +3,9 @@
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        Theme.AppCompat.Light.DarkActionBar
     -->
-    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -49,6 +50,7 @@
         <item name="android:maxLines">4</item>
         <item name="android:ellipsize">end</item>
         <item name="android:lineSpacingExtra">@dimen/card_space_interline</item>
+        <item name="android:padding">@dimen/card_padding_detail</item>
     </style>
     <style name="CardTextTitle">
         <item name="android:maxLines">1</item>
