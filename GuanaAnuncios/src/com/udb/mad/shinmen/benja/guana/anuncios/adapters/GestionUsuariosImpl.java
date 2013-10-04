@@ -52,7 +52,6 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 	public int position;
 	private JSONDownloaderTask<JSONArray> jsonTask;
 	private JSONDownloaderTask<JSONObject> jsonTaskObj;
-	//private SharedPreferences prefs;
 	private String usuario;
 	ProgressDialog pd;
 
@@ -63,7 +62,8 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 
 	@Override
 	public void registrarUsuario(String pais, String correoElectronicoUsuario,
-			String claveUsuario, String alias, SharedPreferences prefs, String latitud, String altitud) {
+			String claveUsuario, String alias, SharedPreferences prefs
+			, String latitud, String altitud) {
 
 		//this.prefs = prefs;
 		this.usuario = alias;
@@ -92,6 +92,19 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 		jsonTaskObj = new JSONDownloaderTask<JSONObject>(url,
 				JSONDownloaderTask.METODO_POST, parametros);
 		jsonTaskObj.setOnFinishDownloadJSONObject(this);
+		jsonTaskObj.setOnStartDownloadListener(new OnStartDownload() {
+            @Override
+            public void onStartDownload() {
+                pd = new ProgressDialog(activity);
+                pd.setTitle(activity.getResources()
+                        .getString(R.string.titulo_procesando));
+                pd.setMessage(activity.getResources()
+                        .getString(R.string.titulo_espere));
+                pd.setCancelable(false);
+                pd.setIndeterminate(true);
+                pd.show();
+            }
+        });
 		jsonTaskObj.execute();
 	}
 
@@ -114,7 +127,8 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 				pd = new ProgressDialog(activity);
 				pd.setTitle(activity.getResources()
 						.getString(R.string.titulo_procesando));
-				pd.setMessage(activity.getResources().getString(R.string.titulo_espere));
+				pd.setMessage(activity.getResources()
+				        .getString(R.string.titulo_espere));
 				pd.setCancelable(false);
 				pd.setIndeterminate(true);
 				pd.show();
@@ -137,8 +151,7 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 
 			result = new HashMap<String, String>();
 
-			result.put(RESULTADO, "2"); // indica que el alias o correo ya
-										// existen
+			result.put(RESULTADO, "2");
 		}
 
 		return result;
@@ -152,7 +165,8 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 
 			Map<String, Object> pais = new HashMap<String, Object>();
 			pais.put(CODIGO_PAIS, "-1");
-			pais.put(NOMBRE, activity.getResources().getString(R.string.lbl_seleccione));
+			pais.put(NOMBRE, activity.getResources()
+			        .getString(R.string.lbl_seleccione));
 			paises.add(pais);
 
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -193,16 +207,13 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 
 
 				 /*
-				 * Guardando el token en los shared preferences para que la proxima vez no pida logearse al usuario
+				 * Guardando el token en los shared preferences 
+				 * para que la proxima vez no pida logearse al usuario
 				 * sino lo envie directamente a la lista de anuncios
 				 * 
 				 * */
 				String token = jsonData.getString(TOKEN);
 				
-				/*SharedPreferences.Editor editor = prefs.edit();
-				editor.putString(TOKEN, token);
-				editor.putString(USUARIO, usuario);
-				editor.commit();*/
 				PreferenciasUsuario.setToken(token, activity);
 				PreferenciasUsuario.setUsuario(usuario, activity);
 
@@ -219,13 +230,9 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 			} else {
 
 				JSONObject errores = jsonData.getJSONObject("errors");
-
-				/*
-				 * String usuario = errores.getString("usuario"); String clave =
-				 * errores.getString("clave");
-				 */
 				Toast.makeText(activity,
-						"Error al guardar usuario: " + errores.getString("mensaje"),
+						"Error al guardar usuario: " 
+						            + errores.getString("mensaje"),
 						Toast.LENGTH_LONG).show();
 				
 				Log.e(RegistroActivity.class.toString(),
@@ -234,8 +241,6 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 			Log.e("GestionUsuario", e.getMessage(), e);
 			Toast.makeText(activity,
 					"Error al guardar usuario: " + e.toString(),
@@ -244,8 +249,5 @@ public class GestionUsuariosImpl implements GestionUsuarios,
 	}
 
 	@Override
-	public void loadError() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void loadError() {}
 }
