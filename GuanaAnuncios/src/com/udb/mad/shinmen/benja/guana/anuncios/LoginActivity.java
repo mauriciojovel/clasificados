@@ -30,20 +30,15 @@ public class LoginActivity extends ActionBarActivity implements
 		edtUsuario = (EditText) findViewById(R.id.edtUsuario);
 		edtPassword = (EditText) findViewById(R.id.edtPassword);
 
-		/*btnLogin = (Button) findViewById(R.id.btnLogin);
-		btnRegistrar = (Button) findViewById(R.id.btnRegistrar);
-
-		btnLogin.setOnClickListener(this);
-		btnRegistrar.setOnClickListener(this);*/
 		edtPassword.setOnKeyListener(this);
 		edtPassword.setOnEditorActionListener(this);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+	    boolean b = super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
+		return b;
 	}
 	
 	@Override
@@ -71,7 +66,6 @@ public class LoginActivity extends ActionBarActivity implements
 	private void validar(){
 		String usuario = edtUsuario.getText().toString();
 		String pass = edtPassword.getText().toString();
-		showProgressBar();
 		
 		if (usuario != null && !usuario.equals("") && pass != null
 				&& !pass.equals("")) {
@@ -79,20 +73,7 @@ public class LoginActivity extends ActionBarActivity implements
 		} else {
 			Toast.makeText(this, "Por favor ingrese los campos requeridos",
 					Toast.LENGTH_SHORT).show();
-			hiddenProgressBar();
 		}
-	}
-	
-	private void showProgressBar() {
-	    /*findViewById(R.id.btnLogin).setVisibility(View.GONE);
-        findViewById(R.id.btnRegistrar).setVisibility(View.GONE);*/
-        findViewById(R.id.progressBarLogin).setVisibility(View.VISIBLE);
-	}
-	
-	private void hiddenProgressBar() {
-	    /*findViewById(R.id.btnLogin).setVisibility(View.VISIBLE);
-        findViewById(R.id.btnRegistrar).setVisibility(View.VISIBLE);*/
-        findViewById(R.id.progressBarLogin).setVisibility(View.GONE);
 	}
 
 	private void logear(String usuario, String pass) {

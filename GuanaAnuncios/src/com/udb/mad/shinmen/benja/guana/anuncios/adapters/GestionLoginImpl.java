@@ -7,15 +7,16 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.udb.mad.shinmen.benja.guana.anuncios.AnuncioActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.LoginActivity;
 import com.udb.mad.shinmen.benja.guana.anuncios.R;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask;
+import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.JSONDownloaderTask.OnStartDownload;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.MD5Utility;
 import com.udb.mad.shinmen.benja.guana.anuncios.utilidades.PreferenciasUsuario;
 
@@ -28,6 +29,7 @@ public class GestionLoginImpl implements GestionLogin
 	public static final String USUARIO = "usuario";
 	public static final String CLAVE = "clave";
 	public static final String DISPOSITIVO = "dispositivo";
+	ProgressDialog pd;
 	
 	private JSONDownloaderTask<JSONObject> jsonTask;
 	private LoginActivity activity;
@@ -36,7 +38,7 @@ public class GestionLoginImpl implements GestionLogin
 	
 	@Override
 	public void loginUsuario(String usuario, String password, String url
-	        , LoginActivity activity) {
+	        , final LoginActivity activity) {
 
 		this.activity = activity;
 		this.usuario = usuario;
@@ -52,6 +54,19 @@ public class GestionLoginImpl implements GestionLogin
 		jsonTask = new JSONDownloaderTask<JSONObject>(url
 		        , JSONDownloaderTask.METODO_POST, parametros);		
 		jsonTask.setOnFinishDownload(this);
+		jsonTask.setOnStartDownloadListener(new OnStartDownload() {
+            @Override
+            public void onStartDownload() {
+                pd = new ProgressDialog(activity);
+                pd.setTitle(activity.getResources()
+                        .getString(R.string.titulo_procesando));
+                pd.setMessage(activity.getResources()
+                        .getString(R.string.titulo_espere));
+                pd.setCancelable(false);
+                pd.setIndeterminate(true);
+                pd.show();
+            }
+        });
 		jsonTask.execute();
 	}
 	
@@ -59,8 +74,11 @@ public class GestionLoginImpl implements GestionLogin
 	@Override
 	public void onFinishDownload(JSONObject jsonData) {
 		try {
-			
 			String status = jsonData.getString(ESTADO);
+			
+			if(pd != null) {
+			    pd.dismiss();
+			}
 			
 			if(status.equals(EXITO)){
 				
@@ -82,20 +100,14 @@ public class GestionLoginImpl implements GestionLogin
 				activity.finish();
 				
 			}else{
-				
-				activity.findViewById(R.id.progressBarLogin)
-				                                .setVisibility(View.GONE);
-				
 				Toast.makeText(activity, "Usuario/Contraseña invalidos!!.."
 				        , Toast.LENGTH_SHORT).show();
-				
 				/*			
 				JSONObject errores = jsonData.getJSONObject("errors");
 				
 				String usuario = errores.getString("usuario");
 				String clave = errores.getString("clave");
 				*/
-				
 			}
 						
 		} catch (Exception e) {
