@@ -31,7 +31,7 @@
                 android:bottom="@dimen/card_padding_text"
                 android:left="@dimen/card_padding_text"
                 android:right="@dimen/card_padding_text"
-                android:top="@dimen/card_padding_text" />
+                android:top="@dimen/card_padding_text_top" />
         </shape>
     </item>
 

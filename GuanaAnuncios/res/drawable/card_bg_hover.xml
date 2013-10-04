@@ -14,7 +14,7 @@
         <shape android:shape="rectangle" >
             <corners android:radius="@dimen/card_radius" />
 
-            <solid android:color="@color/card_hover_blue" />
+            <solid android:color="@color/card_hover_orange" />
         </shape>
     </item>
     <item

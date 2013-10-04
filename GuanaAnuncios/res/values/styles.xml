@@ -11,6 +11,9 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
     <!-- Application theme. -->
@@ -46,11 +49,13 @@
         <item name="android:layout_marginRight">30dp</item>
     </style>
     
+    <!-- Card Styles -->
     <style name="CardTextContent">
         <item name="android:maxLines">4</item>
         <item name="android:ellipsize">end</item>
         <item name="android:lineSpacingExtra">@dimen/card_space_interline</item>
-        <item name="android:padding">@dimen/card_padding_detail</item>
+        <item name="android:paddingLeft">@dimen/card_padding_detail</item>
+        <item name="android:paddingRight">@dimen/card_padding_detail</item>
     </style>
     <style name="CardTextTitle">
         <item name="android:maxLines">1</item>
@@ -69,5 +74,13 @@
         <item name="android:layout_marginTop">@dimen/card_ruler_margin</item>
         <item name="android:layout_marginBottom">@dimen/card_ruler_margin</item>
     </style>
+    
+    <!-- Action Bar Style -->
+   <style name="MyActionBar"
+           parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/actionbar_background</item>
 
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/actionbar_background</item>
+    </style>
 </resources>
