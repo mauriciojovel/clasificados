@@ -8,5 +8,6 @@
     <color name="border_image_line">#dbdbdc</color>
     <color name="image_background">#ffeeeeee</color>
     <color name="actionbar_white">#66cccccc</color>
-    <color name="actionbar_orange">#66F57300</color>
+    <color name="actionbar_grey">#ddd</color>
+    <color name="actionbar_orange">#FFF4DBC6</color>
 </resources>
