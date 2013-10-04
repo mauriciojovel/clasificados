@@ -12,8 +12,14 @@
             backward-compatibility can go here.
         -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <!-- 
+        <item name="android:windowActionBarOverlay">true</item>
+         -->
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/MyActionBar</item>
+        <!-- 
+        <item name="windowActionBarOverlay">true</item>
+         -->
     </style>
 
     <!-- Application theme. -->
